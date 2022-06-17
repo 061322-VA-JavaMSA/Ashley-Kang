@@ -17,7 +17,7 @@ public class Employee extends User{
 	
 	@Override
 	public String toString() {
-		return "Customer [name=" + name + ", userName=" + userName + ", userPassword=" + userPassword + ", userEmail=" + userEmail + ", userID="
+		return "Employee [name=" + name + ", userName=" + userName + ", userPassword=" + userPassword + ", userEmail=" + userEmail + ", userID="
 				+ userID + ", authKey=" + authKey + "]";
 	}
 }
