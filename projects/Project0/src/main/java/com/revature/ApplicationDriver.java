@@ -1,5 +1,8 @@
 package com.revature;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.revature.models.Customer;
@@ -10,6 +13,18 @@ public class ApplicationDriver {
 	static Scanner sc;
 
 	public static void main(String[] args) {
+		
+		String url = "jdbc:postgresql://database-1.c0n1i0afb1oi.us-east-1.rds.amazonaws.com/postgres";
+		String username = "";
+		String password = "";
+		
+		/*try {
+		Connection c = DriverManager.getConnection(url,username,password);	
+		System.out.println(c.getMetaData().getDriverName());
+		}catch (Exception e) {
+			e.printStackTrace();
+		}*/
+		
 		sc = new Scanner(System.in);
 		//Customer newUser;
 		Employee newUser;
@@ -53,6 +68,8 @@ public class ApplicationDriver {
 		
 		
 		sc.close();
+		
+		
 	}
 
 }
