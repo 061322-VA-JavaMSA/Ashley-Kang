@@ -1,10 +1,5 @@
 package com.revature.models;
 
-
-/*
- * Inventory?
- * 
- */
 public abstract class User {
 	protected String name;
 	protected String userName;

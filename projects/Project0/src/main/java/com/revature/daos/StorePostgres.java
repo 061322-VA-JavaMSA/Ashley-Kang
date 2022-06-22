@@ -3,30 +3,23 @@ package com.revature.daos;
 import java.util.List;
 
 import com.revature.models.Item;
-import com.revature.models.User;
 
-public class UserPostgres implements UserDAO{
-	
+public class StorePostgres implements StoreDAO{
+
 	@Override
-	public User createUser(User u) {
+	public Item createItem(Item i) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public User retrieveUserbyId(int id) {
+	public Item retrieveById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public User retrieveByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<User> retrieveUsers() {
+	public List<Item> retrieveInventory() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -38,7 +31,7 @@ public class UserPostgres implements UserDAO{
 	}
 
 	@Override
-	public boolean updateUser() {
+	public boolean updateItem() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -50,19 +43,13 @@ public class UserPostgres implements UserDAO{
 	}
 
 	@Override
-	public void makeOffer(int amount) {
+	public boolean itemOffer() {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override
-	public List<Item> ownedItems() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void paymentsLeft() {
+	public void viewPayments() {
 		// TODO Auto-generated method stub
 		
 	}

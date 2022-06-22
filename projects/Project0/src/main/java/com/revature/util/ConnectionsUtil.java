@@ -12,7 +12,7 @@ public class ConnectionsUtil {
 	public static Connection getConnectionFromFile() throws IOException, SQLException {
 		Properties prop = new Properties();
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		prop.load(loader.getResourceAsStream("connection.properties"));
+		prop.load(loader.getResourceAsStream("connections.properties"));
 		
 		String url = prop.getProperty("url");
 		String username = prop.getProperty("username");

@@ -1,9 +1,5 @@
 package com.revature.models;
 
-/*
- * authentication id?
- */
-
 public class Employee extends User{
 	private String authKey;
 	

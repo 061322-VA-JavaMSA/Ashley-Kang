@@ -2,11 +2,6 @@ package com.revature.models;
 
 public class Customer extends User{
 	
-	/*
-	 * User Only:
-	 * store payment card
-	 * 
-	 */
 	private String cardNumber;
 	
 	public void setCard(String card) {
