@@ -1,19 +1,26 @@
 package com.revature;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
+//import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.revature.models.Customer;
 import com.revature.models.Employee;
+import com.revature.services.CustomerService;
 import com.revature.util.ConnectionsUtil;
 
 
 public class ApplicationDriver {
 	static Scanner sc;
-	//static boolean optionSelected;
-	//static User?
+	
+	static boolean loginOptionSelected;
+	static boolean storeMenuSelected;
+	//static boolean isCustomer;
+	
+	static CustomerService cs;
+	//static Employee e;
+	//static Customer c;
 	
 	static void menuScreen(String input) {
 		switch(input) {
@@ -32,8 +39,9 @@ public class ApplicationDriver {
 				newUser.setUserEmail(sc.nextLine());
 				System.out.println("Please enter your authorization key");
 				newUser.setKey(sc.nextLine());
-				System.out.println(newUser);
-				//optionSelected = true;
+				cs.createEmployee(newUser);
+				//System.out.println(newUser);
+				loginOptionSelected = true;
 			}else if(sc.nextLine().equals("N")|| sc.nextLine().equals("n")) {
 				Customer newUser = new Customer();
 				System.out.println("Please enter your name");
@@ -46,10 +54,11 @@ public class ApplicationDriver {
 				newUser.setUserEmail(sc.nextLine());
 				System.out.println("Please enter your payment card number");
 				newUser.setCard(sc.nextLine());
-				System.out.println(newUser);
-				//optionSelected = true;
+				cs.createCustomer(newUser);
+				//System.out.println(newUser);
+				loginOptionSelected = true;
 			}else {
-				//System.out.println("Input not recognized. Please try again.");
+				System.out.println("Input not recognized. Please try again.");
 			}	
 			break;
 		case "2":
@@ -59,11 +68,13 @@ public class ApplicationDriver {
 			System.out.println("Please enter your password");
 			String password = sc.nextLine();
 			//Something retrieves the user
+			//cs.retrieveUser();
 			//UserPostgres.retrievebyusername?
+			loginOptionSelected = true;
 			break;
 		case "3":
 			System.out.println("Thank you for shopping with us today. Goodbye.");
-			//optionSelected = true;
+			loginOptionSelected = true;
 			break;
 		default:
 			System.out.println("Input not found. Please try again.");
@@ -71,30 +82,85 @@ public class ApplicationDriver {
 			
 		}
 	}
+	
+	static void storeMenuCustomer(String input) {
+		switch(input) {
+		case "1":
+			showInventory();
+			storeMenuSelected = true;
+			break;
+		case "2":
+			makePurchase();
+			storeMenuSelected = true;
+			break;
+		case "3":
+			//quit
+			System.out.println("Thank you for shopping with us today. Goodbye.");
+			storeMenuSelected = true;
+			break;
+		default:
+			System.out.println("Input not found. Please try again.");
+			break;
+		}
+	}
+	
+	static void storeMenuEmployee(String input) {
+		switch(input) {
+		case "1":
+			showInventory();
+			storeMenuSelected = true;
+			break;
+		case "2":
+			purchaseHistory();
+			storeMenuSelected = true;
+			break;
+		case "3":
+			createItem();
+			storeMenuSelected = true;
+			break;
+		case "4":
+			//quit
+			System.out.println("Thank you for shopping with us today. Goodbye.");
+			storeMenuSelected = true;
+			break;
+		default:
+			System.out.println("Input not found. Please try again.");
+			break;
+		}
+	}
+	
+	static void showInventory() {
+		
+	}
+	
+	static boolean makePurchase() {
+		return false;
+	}
+	
+	static void purchaseHistory() {
+		
+	}
+	
+	static boolean createItem() {
+		return false;
+	}
+	
 
 	public static void main(String[] args) {
-		
-		//String url = "";
-		//String username = "";
-		//String password = "";
-	
-		
+		cs = new CustomerService();
+
 		try {
-		//Connection c = DriverManager.getConnection(url,username,password);	
-		//System.out.println(c.getMetaData().getDriverName());
 			ConnectionsUtil.getConnectionFromFile();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		sc = new Scanner(System.in);
-		//Customer newUser;
-		//Employee newUser;
 		
 		System.out.println("Welcome to Revature Flower Shop!");
 		System.out.println("Please choose an option: \n 1: Register a new account\n 2: Login \n 3: Exit the program");
 		
-		String choice = sc.nextLine();
+		//String choice = sc.nextLine();
 		
 		
 		/*boolean optionSelected = false;
@@ -103,47 +169,21 @@ public class ApplicationDriver {
 		 * }
 		 */
 		
-		/*switch(choice) {
-		case "1":
-			/*newUser = new Customer();
-			System.out.println("Please enter your name");
-			newUser.setName(sc.nextLine());
-			System.out.println("Please enter your Username");
-			newUser.setUserName(sc.nextLine());
-			System.out.println("Please enter your Password");
-			newUser.setUserPassword(sc.nextLine());
-			System.out.println("Please enter your Email");
-			newUser.setUserEmail(sc.nextLine());
-			System.out.println("Please enter your payment card number");
-			newUser.setCard(sc.nextLine());
-			System.out.println(newUser);
-			
-			
-			
-			newUser = new Employee();
-			System.out.println("Please enter your name");
-			newUser.setName(sc.nextLine());
-			System.out.println("Please enter your Username");
-			newUser.setUserName(sc.nextLine());
-			System.out.println("Please enter your Password");
-			newUser.setUserPassword(sc.nextLine());
-			System.out.println("Please enter your Email");
-			newUser.setUserEmail(sc.nextLine());
-			System.out.println("Please enter your authorization key");
-			newUser.setKey(sc.nextLine());
-			System.out.println(newUser);
-			break;
-		case "2":
-			System.out.println("The Login Screen");
-			break;
-		case "3":
-			System.out.println("Thank you for shopping with us today. Goodbye.");
-			break;
-		default:
-			System.out.println("Input not found. Please try again.");
-			break;
-			
-		}*/
+		
+		
+		/*
+		 * System.out.println("Welcome " + user_name);
+		 * System.out.println("Please select an option from below.");
+		 * 
+		 * if(isCustomer){
+		 * System.out.println(" 1: Browse items \n 2: Make a purchase \n 3: Quit");
+		 * while(storeMenuSelected == false){
+		 * 	storeMenuCustomer(sc.nextLine());
+		 * }
+		 * }else{
+		 * 	storeMenuEmployee(sc.nextLine());
+		 * }
+		 */
 		
 		sc.close();
 		

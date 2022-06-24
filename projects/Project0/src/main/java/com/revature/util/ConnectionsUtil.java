@@ -1,9 +1,12 @@
 package com.revature.util;
 
+//import java.beans.Statement;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class ConnectionsUtil {
@@ -21,6 +24,9 @@ public class ConnectionsUtil {
 		if(c == null||c.isClosed()) {
 			c = DriverManager.getConnection(url,username,password);
 			System.out.println("Connection successful");
+			//String sql = "set search_path to Project0,public;";
+			//Statement s = c.createStatement();
+			//s.executeQuery(sql);
 		}
 		return c;
 	}
