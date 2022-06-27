@@ -1,0 +1,58 @@
+html{
+    background-color: white;
+
+    padding: 2%;
+    font-family: "Monaco", "Lucida Console", monospace;
+    font-weight: normal;
+    font-style: normal;
+}
+
+h2 {
+text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    margin:0;
+    padding:0;
+    overflow: hidden;
+    background-color: aliceblue;
+}
+
+nav ul li{
+    float: left;
+}
+
+nav ul li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 14px;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+background-color: rgb(201, 252, 252);
+}
+
+table{
+    border-collapse: collapse;
+    padding: 14px;
+    text-align:left;
+}
+table, td {
+    border: 1px dotted;
+}
+.lie:hover{
+    background-color: rgb(179, 56, 56);
+}
+
+.truth:hover{
+    background-color: rgb(50, 117, 50) ;
+}
+
+footer{
+background-color:  aliceblue;
+text-align: center;
+padding: 1px;
+}
