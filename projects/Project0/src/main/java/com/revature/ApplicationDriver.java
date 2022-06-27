@@ -8,6 +8,7 @@ import java.util.Scanner;
 import com.revature.models.Customer;
 import com.revature.models.Employee;
 import com.revature.services.CustomerService;
+import com.revature.services.StoreService;
 import com.revature.util.ConnectionsUtil;
 
 
@@ -19,6 +20,7 @@ public class ApplicationDriver {
 	//static boolean isCustomer;
 	
 	static CustomerService cs;
+	static StoreService ss;
 	//static Employee e;
 	//static Customer c;
 	

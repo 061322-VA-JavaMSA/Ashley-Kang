@@ -2,31 +2,40 @@ package com.revature.models;
 
 public class Item {
 	
-	private String itemID;
+	private int itemID;
 	private String itemName;
 	private String itemDescription;
-	private String ownerID;
-	//private int numBids;
-	//private int[] bidIDs;
+	private float itemCost;
+	
+	//int?
+	private int ownerID;
 	private boolean isOwned;
 	
 	public Item(){
 		
 	}
 	
-	public String getItemID() {
+	public float getItemCost() {
+		return itemCost;
+	}
+
+	public void setItemCost(float itemCost) {
+		this.itemCost = itemCost;
+	}
+	
+	public int getItemID() {
 		return itemID;
 	}
 
-	public void setItemID(String itemID) {
+	public void setItemID(int itemID) {
 		this.itemID = itemID;
 	}
 
-	public String getOwnerID() {
+	public int getOwnerID() {
 		return ownerID;
 	}
 
-	public void setOwnerID(String ownerID) {
+	public void setOwnerID(int ownerID) {
 		this.ownerID = ownerID;
 	}
 

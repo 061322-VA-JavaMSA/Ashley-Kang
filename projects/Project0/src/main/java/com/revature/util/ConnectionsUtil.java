@@ -24,9 +24,6 @@ public class ConnectionsUtil {
 		if(c == null||c.isClosed()) {
 			c = DriverManager.getConnection(url,username,password);
 			System.out.println("Connection successful");
-			//String sql = "set search_path to Project0,public;";
-			//Statement s = c.createStatement();
-			//s.executeQuery(sql);
 		}
 		return c;
 	}

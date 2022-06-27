@@ -6,18 +6,27 @@ import com.revature.models.Item;
 //import com.revature.models.User;
 
 public interface StoreDAO {
+	//Create items
 	Item createItem(Item i);
+	
+	//Retrieve item
 	Item retrieveById(int id);
-	//Item retrieveByName(String name);
+	Item retrieveByName(String name);
+	
+	//Retrieve list of all items
 	List<Item> retrieveInventory();
-	boolean itemOffer();
-	//accept or reject offer for item
-	//update item to owned state (implicitely?)
-	//reject all offers once something is accepted (implicit?)
-	//view payments
+	
+	//View items offer and reject or accept
+	boolean itemOffer(int itemID);
+	
+	
+	//view all payments left
 	void viewPayments();
-	//calculate weekly payments
+	
+	//delete items
 	boolean deleteByID(int id);
-	boolean updateItem();
 	boolean deleteAll();
+	
+	//update item information
+	boolean updateItem(int id);
 }

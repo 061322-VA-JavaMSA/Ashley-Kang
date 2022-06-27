@@ -177,11 +177,11 @@ public class UserPostgres implements UserDAO{
 			
 			while(rs.next()) {
 				item = new Item();
-				item.setItemID(rs.getString("itemID"));
+				item.setItemID(rs.getInt("itemID"));
 				item.setItemDescription(rs.getString("item_desc"));
 				item.setItemName(rs.getString("item_name"));
 			    item.setOwned(true);
-				item.setOwnerID(rs.getString("owners_id"));
+				item.setOwnerID(rs.getInt("owners_id"));
 				
 				items.add(item);
 			}
@@ -198,8 +198,6 @@ public class UserPostgres implements UserDAO{
 		String sql = "select * from bids join inventory on cus_id = owners_id;";
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
-			ps.setInt(1, userID);
-			
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
@@ -387,7 +385,7 @@ public class UserPostgres implements UserDAO{
 		if(isCust) {
 			String sql="";
 			boolean isQuit = false;
-			while(isQuit = false) {
+			while(isQuit == false) {
 			System.out.println("What would you like to update?\n1: Name\n2: Username"
 					+ "\n3: Password\n4: Email\n5: Card Number\n6: Quit");
 			switch(sc.nextLine()) {
