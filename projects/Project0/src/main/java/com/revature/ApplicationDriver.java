@@ -1,5 +1,6 @@
 package com.revature;
 
+import java.util.List;
 //import java.sql.Connection;
 //import java.sql.DriverManager;
 //import java.sql.SQLException;
@@ -7,6 +8,7 @@ import java.util.Scanner;
 
 import com.revature.models.Customer;
 import com.revature.models.Employee;
+import com.revature.models.Item;
 import com.revature.services.CustomerService;
 import com.revature.services.StoreService;
 import com.revature.util.ConnectionsUtil;
@@ -17,12 +19,12 @@ public class ApplicationDriver {
 	
 	static boolean loginOptionSelected;
 	static boolean storeMenuSelected;
-	//static boolean isCustomer;
+	static boolean isCustomer;
 	
 	static CustomerService cs;
 	static StoreService ss;
-	//static Employee e;
-	//static Customer c;
+	static Employee e;
+	static Customer c;
 	
 	static void menuScreen(String input) {
 		switch(input) {
@@ -41,8 +43,8 @@ public class ApplicationDriver {
 				newUser.setUserEmail(sc.nextLine());
 				System.out.println("Please enter your authorization key");
 				newUser.setKey(sc.nextLine());
+				isCustomer = false;
 				cs.createEmployee(newUser);
-				//System.out.println(newUser);
 				loginOptionSelected = true;
 			}else if(sc.nextLine().equals("N")|| sc.nextLine().equals("n")) {
 				Customer newUser = new Customer();
@@ -57,7 +59,7 @@ public class ApplicationDriver {
 				System.out.println("Please enter your payment card number");
 				newUser.setCard(sc.nextLine());
 				cs.createCustomer(newUser);
-				//System.out.println(newUser);
+				isCustomer = true;
 				loginOptionSelected = true;
 			}else {
 				System.out.println("Input not recognized. Please try again.");
@@ -65,13 +67,35 @@ public class ApplicationDriver {
 			break;
 		case "2":
 			System.out.println("Login");
+			System.out.println("Are you logging in as a customer or an employee?\n\"1\" for Customer, \"2\" for Employee");
+			if(sc.nextLine().equals("1")) {
+				isCustomer = true;
+			}else if(sc.nextLine().equals("2")) {
+				isCustomer = false;
+			}else {
+				System.out.println("Input not understood.");
+			}
 			System.out.println("Please enter your username");
 			String username = sc.nextLine();
 			System.out.println("Please enter your password");
 			String password = sc.nextLine();
-			//Something retrieves the user
-			//cs.retrieveUser();
-			//UserPostgres.retrievebyusername?
+			
+			if(isCustomer) {
+				c = cs.retrieveCByUsername(username);
+				if(c.getUserPassword().equals(password)){
+					System.out.println("Login Successful");
+				}else {
+					System.out.println("Invalid password");
+				}
+				
+			}else {
+				e = cs.retrieveEByUsername(username);
+				if(c.getUserPassword().equals(password)){
+					System.out.println("Login Successful");
+				}else {
+					System.out.println("Invalid password");
+				}
+			}
 			loginOptionSelected = true;
 			break;
 		case "3":
@@ -96,6 +120,13 @@ public class ApplicationDriver {
 			storeMenuSelected = true;
 			break;
 		case "3":
+			showOwnedItems();
+			storeMenuSelected = true;
+			break;
+		case "4":
+			account(true);
+			break;
+		case "5":
 			//quit
 			System.out.println("Thank you for shopping with us today. Goodbye.");
 			storeMenuSelected = true;
@@ -121,6 +152,10 @@ public class ApplicationDriver {
 			storeMenuSelected = true;
 			break;
 		case "4":
+			account(false);
+			storeMenuSelected = true;
+			break;
+		case "5":
 			//quit
 			System.out.println("Thank you for shopping with us today. Goodbye.");
 			storeMenuSelected = true;
@@ -132,7 +167,7 @@ public class ApplicationDriver {
 	}
 	
 	static void showInventory() {
-		
+		List<Item> theStore = ss.retrieveInventory();
 	}
 	
 	static boolean makePurchase() {
@@ -147,7 +182,16 @@ public class ApplicationDriver {
 		return false;
 	}
 	
+	static void account(boolean isCust) {
+		
+	}
+	
+	static void showOwnedItems() {
+		
+	}
 
+	
+	
 	public static void main(String[] args) {
 		cs = new CustomerService();
 
@@ -162,30 +206,27 @@ public class ApplicationDriver {
 		System.out.println("Welcome to Revature Flower Shop!");
 		System.out.println("Please choose an option: \n 1: Register a new account\n 2: Login \n 3: Exit the program");
 		
-		//String choice = sc.nextLine();
+		String choice = sc.nextLine();
 		
 		
-		/*boolean optionSelected = false;
-		 * while(optionSelected == false){
-		 * ApplicationDriver.menuScreen(choice);
-		 * }
-		 */
-		
-		
-		
-		/*
-		 * System.out.println("Welcome " + user_name);
-		 * System.out.println("Please select an option from below.");
-		 * 
-		 * if(isCustomer){
-		 * System.out.println(" 1: Browse items \n 2: Make a purchase \n 3: Quit");
-		 * while(storeMenuSelected == false){
-		 * 	storeMenuCustomer(sc.nextLine());
-		 * }
-		 * }else{
-		 * 	storeMenuEmployee(sc.nextLine());
-		 * }
-		 */
+		boolean optionSelected = false;
+		while(optionSelected == false){
+			ApplicationDriver.menuScreen(choice);
+		}
+		 
+		if(isCustomer) {
+			System.out.println("Welcome " + c.getName());
+			System.out.println("Please select an option from below.");
+			while(storeMenuSelected == false){
+			  	storeMenuCustomer(sc.nextLine());
+			}
+		}else {
+			System.out.println("Welcome " + e.getName());
+			System.out.println("Please select an option from below.");
+			while(storeMenuSelected == false){
+			  	storeMenuEmployee(sc.nextLine());
+			}
+		}
 		
 		sc.close();
 		
