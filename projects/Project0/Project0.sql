@@ -38,6 +38,17 @@ emp_name varchar(30),
 auth_num varchar(16));
 
 
+
+--Managers
+drop table if exists managers;
+create table if not exists managers(
+id serial primary key,
+username varchar(30) unique not null,
+user_pass varchar(30) not null,
+email varchar(30) not null,
+man_name varchar(30),
+auth_key varchar(16));
+
 --test customer
 insert into customers (username,user_pass,email,cus_name,card_num) values ('firstTest','p4ssword','firstTest@customer.com','firstCustomer','123456789');
 
@@ -63,28 +74,34 @@ owners_id integer references customers(id));
 
 --test item
 insert into inventory (item_name,item_desc,item_cost) values ('Bouquet of Roses','A small arrangement of roses.','20');
+insert into inventory (item_name,item_desc,item_cost) values ('Bouquet of Lillies','A small arrangement of Lillies.','20');
 
 drop table if exists bids;
 create table if not exists bids(
-cus_id integer references customers(id),
-item_id integer references inventory(item_id),
+bcus_id integer references customers(id),
+bitem_id integer references inventory(item_id),
 offered float,
 payments float);
 
 --test bid
-insert into bids (cus_id,item_id,offered,payments) values ('1','1','20','20');
-insert into bids (cus_id,item_id,offered, payments) values ('1','2','6','6');
+insert into bids (bcus_id,bitem_id,offered, payments) values ('1','1','20','20');
+insert into bids (bcus_id,bitem_id,offered, payments) values ('2','2','6', '6');
 
+select * from bids join customers on cus_id = id;
+
+select * from bids where item_id=2;
+
+
+
+
+--SQL Statements
 select * from bids join inventory on cus_id = owners_id;
-
 update customers set user_pass = 'p4ssword' where id = 2;
-
 update inventory set owners_id ='2' where item_id = 1;
-
 select * from bids join inventory on cus_id = owners_id;
-
 update inventory set owners_id = '2' where item_id = 2;
-
 select * from inventory where owners_id = 2;
+update inventory set owners_id = 1 where item_id = 1;
+update inventory set owners_id = 1 where item_id = 2;
 
 

@@ -1,2 +1,4 @@
 /target/
 connections.properties
+mCredentials.properties
+eCredentials.properties

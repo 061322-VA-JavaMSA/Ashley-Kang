@@ -8,17 +8,21 @@ import com.revature.models.Customer;
 import com.revature.models.Employee;
 import com.revature.models.Item;
 //import com.revature.models.User;
+import com.revature.models.Manager;
 
 public interface UserDAO {
 	//Create Customer/Employee
 	void createCustomer(Customer c);
 	void createEmployee(Employee e);
+	void createManager(Manager m);
 	
 	//Retrieve Customer/Employee
 	Customer retrieveCByID(int id);
 	Employee retrieveEByID(int id);
+	Manager retrieveMByID(int id);
 	Customer retrieveCByUsername(String username);
 	Employee retrieveEByUsername(String username);
+	Manager retrieveMByUsername(String username);
 	
 	//Retrieve all customers/employees
 	List<Customer> retrieveCustomers();
@@ -31,6 +35,7 @@ public interface UserDAO {
 	
 	//update User info
 	boolean updateUser(int id, boolean isCust, Scanner sc);
+	boolean updateManager(int id, Scanner sc);
 	
 	//make offer for item
 	void makeOffer(float amount, int userID, int itemID);

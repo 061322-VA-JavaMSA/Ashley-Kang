@@ -9,12 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.revature.models.Customer;
 import com.revature.models.Employee;
 import com.revature.models.Item;
+import com.revature.models.Manager;
 import com.revature.util.ConnectionsUtil;
 
 public class UserPostgres implements UserDAO{	
+	private static Logger log = LogManager.getLogger(UserPostgres.class);
 	
 	@Override
 	public void createCustomer(Customer cc) {
@@ -32,9 +37,9 @@ public class UserPostgres implements UserDAO{
 				cc.setUserID(rs.getInt("id"));
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 		}
+		log.info("Customer created:" + cc);
 	}
 	
 	@Override
@@ -53,15 +58,16 @@ public class UserPostgres implements UserDAO{
 				e.setUserID(rs.getInt("id"));
 			}
 		} catch (SQLException | IOException except) {
-			// TODO Auto-generated catch block
-			except.printStackTrace();
+			log.error("Connection error. Exception thrown: " + except.fillInStackTrace());
 		}
+		log.info("Employee created" + e);
 	}
 
 	
 	
 	@Override
 	public boolean deleteByID(int id, boolean isCust) {
+		deleteBidsID(id);
 		if(isCust) {
 			String sql = "delete from customers where id = ?;";
 			int rowsChanged = -1;
@@ -70,8 +76,7 @@ public class UserPostgres implements UserDAO{
 				ps.setInt(1, id);
 				rowsChanged = ps.executeUpdate();
 			} catch (SQLException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 			}
 		
 		if(rowsChanged > 0) {
@@ -86,8 +91,7 @@ public class UserPostgres implements UserDAO{
 				ps.setInt(1, id);
 				rowsChanged = ps.executeUpdate();
 			} catch (SQLException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 			}
 		
 		if(rowsChanged > 0) {
@@ -101,15 +105,15 @@ public class UserPostgres implements UserDAO{
 
 	@Override
 	public boolean deleteAll(boolean isCust) {
+		deleteBidsAll();
 		if(isCust) {
-			String sql = "delete * from customers;";
+			String sql = "delete from customers;";
 			int rowsChanged = -1;
 			try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 				PreparedStatement ps = c.prepareStatement(sql);
 				rowsChanged = ps.executeUpdate();
 			} catch (SQLException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 			}
 		
 		if(rowsChanged > 0) {
@@ -123,8 +127,7 @@ public class UserPostgres implements UserDAO{
 				PreparedStatement ps = c.prepareStatement(sql);
 				rowsChanged = ps.executeUpdate();
 			} catch (SQLException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 			}
 		
 		if(rowsChanged > 0) {
@@ -137,7 +140,7 @@ public class UserPostgres implements UserDAO{
 
 	@Override
 	public void makeOffer(float amount, int userID, int itemID) {
-		String sql = "insert into bids (cus_id,item_id,offered) values (?,?,?);";
+		String sql = "insert into bids (bcus_id,bitem_id,offered) values (?,?,?);";
 		int rowsChanged = -1;
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -146,8 +149,7 @@ public class UserPostgres implements UserDAO{
 			ps.setFloat(3,amount);
 			rowsChanged = ps.executeUpdate();
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 		}
 	
 	if(rowsChanged > 0) {
@@ -177,29 +179,27 @@ public class UserPostgres implements UserDAO{
 				items.add(item);
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 		}
 		return items;
 	}
 
 	@Override
 	public void paymentsLeft(int userID) {
-		String sql = "select * from bids join inventory on cus_id = owners_id;";
+		String sql = "select * from bids where bcus_id =?;";
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1, userID);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				if(Integer.parseInt(rs.getString("owners_id")) == userID){
-					System.out.println("Item Name: " + rs.getString("item_name"));
-					System.out.println("Item Cost: " + rs.getString("item_cost"));
+				if(rs.getFloat("payments")!=0){
+					System.out.println("Item ID: " + rs.getString("bitem_id"));
 					System.out.println("Amount owed: " + rs.getFloat("payments"));
 				}
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 		}
 	}
 
@@ -225,8 +225,7 @@ public class UserPostgres implements UserDAO{
 				user.setUserEmail(rs.getString("email"));
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 		}
 		return user;
 	}
@@ -248,13 +247,12 @@ public class UserPostgres implements UserDAO{
 				user.setUserID(rs.getInt("id"));
 				user.setUserName(rs.getString("username"));
 				user.setUserPassword(rs.getString("user_pass"));
-				user.setKey(rs.getString("auth_num"));
+				//user.setKey(rs.getString("auth_num"));
 				user.setName(rs.getString("emp_name"));
 				user.setUserEmail(rs.getString("email"));
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 		}
 		return user;
 	}
@@ -281,8 +279,7 @@ public class UserPostgres implements UserDAO{
 				user.setUserEmail(rs.getString("email"));
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 		}
 		return user;
 	}
@@ -304,13 +301,12 @@ public class UserPostgres implements UserDAO{
 				user.setUserID(rs.getInt("id"));
 				user.setUserName(rs.getString("username"));
 				user.setUserPassword(rs.getString("user_pass"));
-				user.setKey(rs.getString("auth_num"));
+				//user.setKey(rs.getString("auth_num"));
 				user.setName(rs.getString("emp_name"));
 				user.setUserEmail(rs.getString("email"));
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 		}
 		return user;
 	}
@@ -336,8 +332,7 @@ public class UserPostgres implements UserDAO{
 				cusList.add(user);
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 		}
 		return cusList;
 	}
@@ -357,14 +352,13 @@ public class UserPostgres implements UserDAO{
 				user.setUserID(rs.getInt("id"));
 				user.setUserName(rs.getString("username"));
 				user.setUserPassword(rs.getString("user_pass"));
-				user.setKey(rs.getString("auth_num"));
+				//user.setKey(rs.getString("auth_num"));
 				user.setName(rs.getString("emp_name"));
 				user.setUserEmail(rs.getString("email"));
 				empList.add(user);
 			}
 		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 		}
 		return empList;
 	}
@@ -389,8 +383,7 @@ public class UserPostgres implements UserDAO{
 					ps.setInt(2, id);
 					rowsChanged = ps.executeUpdate();
 				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 				}
 			
 			if(rowsChanged > 0) {
@@ -408,8 +401,7 @@ public class UserPostgres implements UserDAO{
 					ps.setInt(2, id);
 					rowsChanged = ps.executeUpdate();
 				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 				}
 			
 			if(rowsChanged > 0) {
@@ -427,8 +419,7 @@ public class UserPostgres implements UserDAO{
 					ps.setInt(2, id);
 					rowsChanged = ps.executeUpdate();
 				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 				}
 			
 			if(rowsChanged > 0) {
@@ -446,8 +437,7 @@ public class UserPostgres implements UserDAO{
 					ps.setInt(2, id);
 					rowsChanged = ps.executeUpdate();
 				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 				}
 			
 			if(rowsChanged > 0) {
@@ -465,8 +455,7 @@ public class UserPostgres implements UserDAO{
 					ps.setInt(2, id);
 					rowsChanged = ps.executeUpdate();
 				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 				}
 			
 			if(rowsChanged > 0) {
@@ -489,7 +478,7 @@ public class UserPostgres implements UserDAO{
 			boolean isQuit = false;
 			while(isQuit == false) {
 			System.out.println("What would you like to update?\n1: Name\n2: Username"
-					+ "\n3: Password\n4: Email\n5: Authorization Number\n6: Quit");
+					+ "\n3: Password\n4: Email\n5: Quit");
 			switch(sc.nextLine()) {
 			case "1":
 				sql = "update employees set emp_name = ? where id = ?;";
@@ -501,8 +490,7 @@ public class UserPostgres implements UserDAO{
 					ps.setInt(2, id);
 					rowsChanged = ps.executeUpdate();
 				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 				}
 			
 			if(rowsChanged > 0) {
@@ -519,8 +507,7 @@ public class UserPostgres implements UserDAO{
 					ps.setInt(2, id);
 					rowsChanged = ps.executeUpdate();
 				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 				}
 			
 			if(rowsChanged > 0) {
@@ -538,8 +525,7 @@ public class UserPostgres implements UserDAO{
 					ps.setInt(2, id);
 					rowsChanged = ps.executeUpdate();
 				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 				}
 			
 			if(rowsChanged > 0) {
@@ -557,8 +543,7 @@ public class UserPostgres implements UserDAO{
 					ps.setInt(2, id);
 					rowsChanged = ps.executeUpdate();
 				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
 				}
 			
 			if(rowsChanged > 0) {
@@ -566,25 +551,6 @@ public class UserPostgres implements UserDAO{
 			}
 				break;
 			case "5":
-				System.out.println("Enter new authorization key.");
-				sql = "update employees set auth_num = ? where id = ?;";
-			
-				rowsChanged = -1;
-				try(Connection c = ConnectionsUtil.getConnectionFromFile()){
-					PreparedStatement ps = c.prepareStatement(sql);
-					ps.setString(1, sc.nextLine());
-					ps.setInt(2, id);
-					rowsChanged = ps.executeUpdate();
-				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			
-			if(rowsChanged > 0) {
-				System.out.println("Authorization key changed successfully.");
-			}
-				break;
-			case "6":
 				isQuit = true;
 				//sc.close();
 				break;
@@ -598,6 +564,211 @@ public class UserPostgres implements UserDAO{
 		}
 		//sc.close();
 		return false;
+	}
+	
+	public boolean deleteBidsAll() {
+		String sql = "delete from bids;";
+		int rowsChanged = -1;
+		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
+			PreparedStatement ps = c.prepareStatement(sql);
+			rowsChanged = ps.executeUpdate();
+		} catch (SQLException | IOException e) {
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
+		}
+	
+	if(rowsChanged > 0) {
+		//System.out.println("Deletion Successful");
+		return true;
+	}
+		return false;
+	}
+	
+	public boolean deleteBidsID(int id) {
+		String sql = "delete from bids where bcus_id = ?;";
+		int rowsChanged = -1;
+		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setInt(1,id);
+			rowsChanged = ps.executeUpdate();
+		} catch (SQLException | IOException e) {
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
+		}
+	
+	if(rowsChanged > 0) {
+		//System.out.println("Deletion Successful");
+		return true;
+	}
+		return false;
+	}
+
+	@Override
+	public void createManager(Manager m) {
+		String sql = "insert into managers (username,user_pass,email,man_name, auth_key) values (?,?,?,?,?) returning id;";
+		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
+			PreparedStatement ps = c.prepareStatement(sql);
+			ps.setString(1, m.getUserName());
+			ps.setString(2, m.getUserPassword());
+			ps.setString(3, m.getUserEmail());
+			ps.setString(4, m.getName());
+			ps.setString(5, m.getKey());
+			
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				m.setUserID(rs.getInt("id"));
+			}
+		} catch (SQLException | IOException except) {
+			log.error("Connection error. Exception thrown: " + except.fillInStackTrace());
+		}
+		log.info("Manager created" + m);
+		
+	}
+
+	@Override
+	public Manager retrieveMByID(int id) {
+		String sql = "select * from managers where id = ?;";
+		Manager user = null;
+		
+		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
+			PreparedStatement ps = c.prepareStatement(sql);
+			
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				user = new Manager();
+				user.setUserID(rs.getInt("id"));
+				user.setUserName(rs.getString("username"));
+				user.setUserPassword(rs.getString("user_pass"));
+				//user.setKey(rs.getString("auth_num"));
+				user.setName(rs.getString("man_name"));
+				user.setUserEmail(rs.getString("email"));
+			}
+		} catch (SQLException | IOException e) {
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
+		}
+		return user;
+	}
+
+	@Override
+	public Manager retrieveMByUsername(String username) {
+		String sql = "select * from managers where username = ?;";
+		Manager user = null;
+		
+		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
+			PreparedStatement ps = c.prepareStatement(sql);
+			
+			ps.setString(1, username);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				user = new Manager();
+				user.setUserID(rs.getInt("id"));
+				user.setUserName(rs.getString("username"));
+				user.setUserPassword(rs.getString("user_pass"));
+				//user.setKey(rs.getString("auth_num"));
+				user.setName(rs.getString("man_name"));
+				user.setUserEmail(rs.getString("email"));
+			}
+		} catch (SQLException | IOException e) {
+			log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
+		}
+		return user;
+	}
+	
+	
+	
+	
+	@Override
+	public boolean updateManager(int id, Scanner sc) {		
+			String sql="";
+			boolean isQuit = false;
+			while(isQuit == false) {
+			System.out.println("What would you like to update?\n1: Name\n2: Username"
+					+ "\n3: Password\n4: Email\n5: Quit");
+			switch(sc.nextLine()) {
+			case "1":
+				sql = "update managers set man_name = ? where id = ?;";
+				System.out.println("Enter new name.");
+				int rowsChanged = -1;
+				try(Connection c = ConnectionsUtil.getConnectionFromFile()){
+					PreparedStatement ps = c.prepareStatement(sql);
+					ps.setString(1, sc.nextLine());
+					ps.setInt(2, id);
+					rowsChanged = ps.executeUpdate();
+				} catch (SQLException | IOException e) {
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
+				}
+			
+			if(rowsChanged > 0) {
+				System.out.println("Name changed successfully.");
+			}
+				break;
+			case "2":
+				System.out.println("Enter new username.");
+				sql = "update managers set username = ? where id = ?;";
+				rowsChanged = -1;
+				try(Connection c = ConnectionsUtil.getConnectionFromFile()){
+					PreparedStatement ps = c.prepareStatement(sql);
+					ps.setString(1, sc.nextLine());
+					ps.setInt(2, id);
+					rowsChanged = ps.executeUpdate();
+				} catch (SQLException | IOException e) {
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
+				}
+			
+			if(rowsChanged > 0) {
+				System.out.println("Username changed successfully.");
+			}
+				break;
+			case "3":
+				System.out.println("Enter new password.");
+				sql = "update managers set user_pass = ? where id = ?;";
+				
+				rowsChanged = -1;
+				try(Connection c = ConnectionsUtil.getConnectionFromFile()){
+					PreparedStatement ps = c.prepareStatement(sql);
+					ps.setString(1, sc.nextLine());
+					ps.setInt(2, id);
+					rowsChanged = ps.executeUpdate();
+				} catch (SQLException | IOException e) {
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
+				}
+			
+			if(rowsChanged > 0) {
+				System.out.println("Password changed successfully.");
+			}
+				break;
+			case "4":
+				System.out.println("Enter new email.");
+				sql = "update managers set email = ? where id = ?;";
+				
+				rowsChanged = -1;
+				try(Connection c = ConnectionsUtil.getConnectionFromFile()){
+					PreparedStatement ps = c.prepareStatement(sql);
+					ps.setString(1, sc.nextLine());
+					ps.setInt(2, id);
+					rowsChanged = ps.executeUpdate();
+				} catch (SQLException | IOException e) {
+					log.error("Connection error. Exception thrown: " + e.fillInStackTrace());
+				}
+			
+			if(rowsChanged > 0) {
+				System.out.println("Email changed successfully.");
+			}
+				break;
+			case "5":
+				isQuit = true;
+				//sc.close();
+				break;
+			default:
+				System.out.println("Input not found. Try again");
+				break;
+				}
+			}
+			//sc.close();
+			return true;
 	}
 
 }

@@ -22,13 +22,13 @@ public class StoreService {
 		//Retrieve item
 		public Item retrieveById(int id) {
 			Item item = sps.retrieveById(id);
-			System.out.println("Item: " + item + "was retrieved");
+			//System.out.println("Item: " + item + "was retrieved");
 			return item;
 			
 		}
 		public Item retrieveByName(String name) {
 			Item item = sps.retrieveByName(name);
-			System.out.println("Item: " + item + "was retrieved");
+			//System.out.println("Item: " + item + "was retrieved");
 			return item;
 		}
 		
