@@ -12,6 +12,8 @@ import com.revature.models.Item;
 import com.revature.services.CustomerService;
 import com.revature.services.StoreService;
 import com.revature.util.ConnectionsUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class ApplicationDriver {
@@ -26,39 +28,44 @@ public class ApplicationDriver {
 	static Employee e;
 	static Customer c;
 	
+	//private static Logger log = LogManager.getLogger(Driver.class);
+	//log.info(as.login(username, password));
+	//log.error("Login exception was thrown: " + e.fillInStackTrace());
+	//static Item i;
+	
 	static void menuScreen(String input) {
 		switch(input) {
 		case "1":
 			System.out.println("Create Account");
 			System.out.println("Do you have an authorization key? [Y] or [N]");
-			if(sc.nextLine().equals("Y")|| sc.nextLine().equals("y")) {
-				Employee newUser = new Employee();
+			if(sc.nextLine().equals("Y")) {
+				e = new Employee();
 				System.out.println("Please enter your name");
-				newUser.setName(sc.nextLine());
+				e.setName(sc.nextLine());
 				System.out.println("Please enter your Username");
-				newUser.setUserName(sc.nextLine());
+				e.setUserName(sc.nextLine());
 				System.out.println("Please enter your Password");
-				newUser.setUserPassword(sc.nextLine());
+				e.setUserPassword(sc.nextLine());
 				System.out.println("Please enter your Email");
-				newUser.setUserEmail(sc.nextLine());
+				e.setUserEmail(sc.nextLine());
 				System.out.println("Please enter your authorization key");
-				newUser.setKey(sc.nextLine());
+				e.setKey(sc.nextLine());
 				isCustomer = false;
-				cs.createEmployee(newUser);
+				cs.createEmployee(e);
 				loginOptionSelected = true;
-			}else if(sc.nextLine().equals("N")|| sc.nextLine().equals("n")) {
-				Customer newUser = new Customer();
+			}else if(sc.nextLine().equals("N")) {
+				c = new Customer();
 				System.out.println("Please enter your name");
-				newUser.setName(sc.nextLine());
+				c.setName(sc.nextLine());
 				System.out.println("Please enter your Username");
-				newUser.setUserName(sc.nextLine());
+				c.setUserName(sc.nextLine());
 				System.out.println("Please enter your Password");
-				newUser.setUserPassword(sc.nextLine());
+				c.setUserPassword(sc.nextLine());
 				System.out.println("Please enter your Email");
-				newUser.setUserEmail(sc.nextLine());
+				c.setUserEmail(sc.nextLine());
 				System.out.println("Please enter your payment card number");
-				newUser.setCard(sc.nextLine());
-				cs.createCustomer(newUser);
+				c.setCard(sc.nextLine());
+				cs.createCustomer(c);
 				isCustomer = true;
 				loginOptionSelected = true;
 			}else {
@@ -68,12 +75,14 @@ public class ApplicationDriver {
 		case "2":
 			System.out.println("Login");
 			System.out.println("Are you logging in as a customer or an employee?\n\"1\" for Customer, \"2\" for Employee");
-			if(sc.nextLine().equals("1")) {
+			String choice = sc.nextLine();
+			if(choice.equals("1")) {
 				isCustomer = true;
-			}else if(sc.nextLine().equals("2")) {
+			}else if(choice.equals("2")) {
 				isCustomer = false;
 			}else {
 				System.out.println("Input not understood.");
+				break;
 			}
 			System.out.println("Please enter your username");
 			String username = sc.nextLine();
@@ -84,13 +93,14 @@ public class ApplicationDriver {
 				c = cs.retrieveCByUsername(username);
 				if(c.getUserPassword().equals(password)){
 					System.out.println("Login Successful");
+					System.out.println(c);
 				}else {
 					System.out.println("Invalid password");
 				}
 				
 			}else {
 				e = cs.retrieveEByUsername(username);
-				if(c.getUserPassword().equals(password)){
+				if(e.getUserPassword().equals(password)){
 					System.out.println("Login Successful");
 				}else {
 					System.out.println("Invalid password");
@@ -109,19 +119,21 @@ public class ApplicationDriver {
 		}
 	}
 	
-	static void storeMenuCustomer(String input) {
+	static void storeMenuCustomer() {
+		System.out.println("Please select an option from below. \n 1: Show Store Inventory\n 2: Make a Purchase\n 3: Show Owned Items\n 4: Update Account\n 5: Quit");
+		String input = sc.nextLine();
 		switch(input) {
 		case "1":
 			showInventory();
-			storeMenuSelected = true;
+			//storeMenuSelected = true;
 			break;
 		case "2":
 			makePurchase();
-			storeMenuSelected = true;
+			//storeMenuSelected = true;
 			break;
 		case "3":
 			showOwnedItems();
-			storeMenuSelected = true;
+			//storeMenuSelected = true;
 			break;
 		case "4":
 			account(true);
@@ -137,23 +149,26 @@ public class ApplicationDriver {
 		}
 	}
 	
-	static void storeMenuEmployee(String input) {
+	static void storeMenuEmployee() {
+		System.out.println("Please select an option from below. \n 1: Show Store Inventory\n 2: Show Purchase History\n 3: Create an Item\n 4: Update Account\n 5: Quit");
+	  	String input = sc.nextLine();
+	  	
 		switch(input) {
 		case "1":
 			showInventory();
-			storeMenuSelected = true;
+			//storeMenuSelected = true;
 			break;
 		case "2":
 			purchaseHistory();
-			storeMenuSelected = true;
+			//storeMenuSelected = true;
 			break;
 		case "3":
 			createItem();
-			storeMenuSelected = true;
+			//storeMenuSelected = true;
 			break;
 		case "4":
 			account(false);
-			storeMenuSelected = true;
+			//storeMenuSelected = true;
 			break;
 		case "5":
 			//quit
@@ -167,33 +182,58 @@ public class ApplicationDriver {
 	}
 	
 	static void showInventory() {
-		List<Item> theStore = ss.retrieveInventory();
+		System.out.println("Inventory\nPlease note the Item ID of any items you would like to purchase.");
+		ss.retrieveInventory();
 	}
 	
-	static boolean makePurchase() {
-		return false;
+	static void makePurchase() {
+		System.out.println("What is the item ID?");
+		int itemID = sc.nextInt();
+		sc.nextLine();
+		
+		System.out.println("How much would you like to offer for this item?");
+		cs.makeOffer(sc.nextFloat(), c.getUserID(), itemID);
+		sc.nextLine();
 	}
 	
 	static void purchaseHistory() {
-		
+		if(isCustomer) {
+			cs.ownedItems(c.getUserID());
+		}
+		else {
+			ss.viewPayments();
+		}
 	}
 	
-	static boolean createItem() {
-		return false;
+	static void createItem() {
+		Item i = new Item();
+		System.out.println("Enter Item Name");
+		i.setItemName(sc.nextLine());
+		System.out.println("Enter Item Cost");
+		i.setItemCost(sc.nextFloat());
+		sc.nextLine();
+		System.out.println("Enter Item Description");
+		i.setItemDescription(sc.nextLine());
+		ss.createItem(i);
 	}
 	
 	static void account(boolean isCust) {
-		
+		if(isCust) {
+			cs.updateUser(c.getUserID(), isCust,sc);
+		}else {
+			cs.updateUser(e.getUserID(), isCust,sc);
+		}
 	}
 	
 	static void showOwnedItems() {
-		
+		cs.ownedItems(c.getUserID());
 	}
 
 	
 	
 	public static void main(String[] args) {
 		cs = new CustomerService();
+		ss = new StoreService();
 
 		try {
 			ConnectionsUtil.getConnectionFromFile();
@@ -208,23 +248,19 @@ public class ApplicationDriver {
 		
 		String choice = sc.nextLine();
 		
-		
-		boolean optionSelected = false;
-		while(optionSelected == false){
+		while(loginOptionSelected == false){
 			ApplicationDriver.menuScreen(choice);
 		}
 		 
 		if(isCustomer) {
 			System.out.println("Welcome " + c.getName());
-			System.out.println("Please select an option from below.");
 			while(storeMenuSelected == false){
-			  	storeMenuCustomer(sc.nextLine());
+				storeMenuCustomer();
 			}
 		}else {
 			System.out.println("Welcome " + e.getName());
-			System.out.println("Please select an option from below.");
 			while(storeMenuSelected == false){
-			  	storeMenuEmployee(sc.nextLine());
+				storeMenuEmployee();
 			}
 		}
 		

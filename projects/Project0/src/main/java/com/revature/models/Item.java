@@ -1,7 +1,7 @@
 package com.revature.models;
 
 public class Item {
-	
+
 	private int itemID;
 	private String itemName;
 	private String itemDescription;
@@ -62,7 +62,11 @@ public class Item {
 	public void setOwned(boolean isOwned) {
 		this.isOwned = isOwned;
 	}
-
+	@Override
+	public String toString() {
+		return "Item [itemID=" + itemID + ", itemName=" + itemName + ", itemDescription=" + itemDescription
+				+ ", itemCost=" + itemCost + ", ownerID=" + ownerID + ", isOwned=" + isOwned + "]";
+	}
 
 	
 }

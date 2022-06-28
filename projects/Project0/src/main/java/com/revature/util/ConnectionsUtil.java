@@ -23,7 +23,7 @@ public class ConnectionsUtil {
 		
 		if(c == null||c.isClosed()) {
 			c = DriverManager.getConnection(url,username,password);
-			System.out.println("Connection successful");
+			//System.out.println("Connection successful");
 		}
 		return c;
 	}

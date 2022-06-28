@@ -1,6 +1,7 @@
 package com.revature.daos;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.revature.models.Item;
 //import com.revature.models.User;
@@ -14,10 +15,10 @@ public interface StoreDAO {
 	Item retrieveByName(String name);
 	
 	//Retrieve list of all items
-	List<Item> retrieveInventory();
+	ArrayList<Item> retrieveInventory();
 	
 	//View items offer and reject or accept
-	boolean itemOffer(int itemID);
+	boolean itemOffer(int itemID, Scanner sc);
 	
 	
 	//view all payments left
@@ -28,5 +29,5 @@ public interface StoreDAO {
 	boolean deleteAll();
 	
 	//update item information
-	boolean updateItem(int id);
+	boolean updateItem(int id, Scanner sc);
 }

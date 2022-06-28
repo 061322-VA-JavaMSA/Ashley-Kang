@@ -1,6 +1,8 @@
 package com.revature.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.revature.daos.UserPostgres;
 import com.revature.models.Customer;
@@ -10,40 +12,40 @@ import com.revature.models.Item;
 public class CustomerService {
 	UserPostgres ups = new UserPostgres();
 	
-	public Customer createCustomer(Customer c) {
-		Customer cc = ups.createUser(c);
-		System.out.println("User: "+ cc + " was created.");
-		return cc;
+	public void createCustomer(Customer c) {
+		ups.createCustomer(c);
+		//System.out.println("User: "+ cc + " was created.");
+		
 	}
 	
-	public Employee createEmployee(Employee e) {
-		Employee ee = ups.createUser(e);
-		System.out.println("User: "+ ee + " was created.");
-		return ee;
+	public void createEmployee(Employee e) {
+		ups.createEmployee(e);
+		//System.out.println("User: "+ ee + " was created.");
+		
 	}
 
 	public Customer retrieveCByID(int id) {
 		Customer cc = ups.retrieveCByID(id);
-		System.out.println("User: " + cc);
+		//System.out.println("User: " + cc);
 		return cc;
 	}
 	
 	
 	public Employee retrieveEByID(int id) {
 		Employee ee = ups.retrieveEByID(id);
-		System.out.println("User: " + ee);
+		//System.out.println("User: " + ee);
 		return ee;
 	}
 	
 	public Customer retrieveCByUsername(String username) {
 		Customer cc = ups.retrieveCByUsername(username);
-		System.out.println("User: " + cc);
+		//System.out.println("User: " + cc);
 		return cc;
 	}
 	
 	public Employee retrieveEByUsername(String username) {
 		Employee ee = ups.retrieveEByUsername(username);
-		System.out.println("User: " + ee);
+		//System.out.println("User: " + ee);
 		return ee;
 	}
 	
@@ -72,22 +74,24 @@ public class CustomerService {
 	}
 	
 	//update User info
-	public boolean updateUser(int id, boolean isCust) {
-		return ups.updateUser(id, isCust);
+	public void updateUser(int id, boolean isCust, Scanner sc) {
+		ups.updateUser(id, isCust, sc);	
 	}
 	
 	//make offer for item
-	public void makeOffer(int amount, int userID, int itemID) {
+	public void makeOffer(float amount, int userID, int itemID) {
 		ups.makeOffer(amount, userID, itemID);
 	}
 	
 	//view all owned items
-	public List<Item> ownedItems(int userID){
-		List<Item> ownerInv = ups.ownedItems(userID);
+	public void ownedItems(int userID){
+		ArrayList<Item> ownerInv = ups.ownedItems(userID);
+		System.out.println("Your owned items: ");
+		//System.out.println(ownerInv.size());
 		for(int i = 0; i< ownerInv.size(); i++) {
-			System.out.println("Item:" + ownerInv.get(i));
+			System.out.println("\tItem Name: " + ownerInv.get(i).getItemName());
+			System.out.println("\tItem Description: " + ownerInv.get(i).getItemDescription());
 		}
-		return ownerInv;
 	}
 	
 	//view payments left

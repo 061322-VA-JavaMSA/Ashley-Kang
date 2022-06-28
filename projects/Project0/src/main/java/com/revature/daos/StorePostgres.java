@@ -16,16 +16,17 @@ public class StorePostgres implements StoreDAO{
 
 	@Override
 	public Item createItem(Item i) {
-		String sql = "insert into inventory (item_name,item_desc,item_cost) values (?,?,?) returning id;";
+		String sql = "insert into inventory (item_name,item_desc,item_cost) values (?,?,?) returning item_id;";
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setString(1, i.getItemName());
 			ps.setString(2, i.getItemDescription());
+			ps.setFloat(3, i.getItemCost());
 			
 			
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				i.setItemID(rs.getInt("id"));
+				i.setItemID(rs.getInt("item_id"));
 			}
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
@@ -62,23 +63,19 @@ public class StorePostgres implements StoreDAO{
 	}
 
 	@Override
-	public List<Item> retrieveInventory() {
+	public ArrayList<Item> retrieveInventory() {
 		Item i = new Item();
-		List<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<Item>();
 		String sql = "select * from inventory;";
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
 					
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				i.setItemID(rs.getInt("id"));
+			while(rs.next()) {
+				i.setItemID(rs.getInt("item_id"));
 				i.setItemCost(rs.getFloat("item_cost"));
 				i.setItemDescription(rs.getString("item_desc"));
 				i.setItemName(rs.getString("item_name"));
-				if(rs.getInt("owners_id")!=0) {
-					i.setOwned(true);
-					i.setOwnerID(rs.getInt("owners_id"));
-				}
 				items.add(i);
 			}
 		} catch (SQLException | IOException e) {
@@ -109,8 +106,8 @@ public class StorePostgres implements StoreDAO{
 	}
 
 	@Override
-	public boolean updateItem(int id) {
-		Scanner sc = new Scanner(System.in);
+	public boolean updateItem(int id, Scanner sc) {
+		//Scanner sc = new Scanner(System.in);
 		String sql="";
 		boolean isQuit = false;
 		while(isQuit == false) {
@@ -132,7 +129,7 @@ public class StorePostgres implements StoreDAO{
 			}
 		
 		if(rowsChanged > 0) {
-			System.out.println("Update Successful");
+			System.out.println("Name changed successfully.");
 		}
 			break;
 		case "2":
@@ -143,19 +140,19 @@ public class StorePostgres implements StoreDAO{
 			try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 				PreparedStatement ps = c.prepareStatement(sql);
 				ps.setFloat(1, sc.nextFloat());
+				//sc.nextLine();
 				ps.setInt(2, id);
 				rowsChanged = ps.executeUpdate();
 			} catch (SQLException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
 		if(rowsChanged > 0) {
-			System.out.println("Update Successful");
+			System.out.println("Cost changed successfully.");
 		}
 			break;
 		case "3":
-			System.out.println("Enter new description.");
+			System.out.println("Enter new description");
 			sql = "update inventory set item_desc = ? where id = ?;";
 			
 			rowsChanged = -1;
@@ -170,7 +167,7 @@ public class StorePostgres implements StoreDAO{
 			}
 		
 		if(rowsChanged > 0) {
-			System.out.println("Update Successful");
+			System.out.println("Description changed successfully.");
 		}
 			break;
 		case "4":
@@ -181,7 +178,7 @@ public class StorePostgres implements StoreDAO{
 			break;
 			}
 		}
-		sc.close();
+		//sc.close();
 		return true;
 	}
 
@@ -208,17 +205,16 @@ public class StorePostgres implements StoreDAO{
 	@Override
 	public void viewPayments() {
 		System.out.println("These are all the payments still active");
-		String sql = "select * from bids join customers on cus_id = owners_id;";
+		String sql = "select * from bids join inventory on cus_id = owners_id;";
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);			
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				
 					System.out.println("Item Name: " + rs.getString("item_name"));
 					System.out.println("Item Cost: " + rs.getString("item_cost"));
 					System.out.println("Amount Owed: " + rs.getFloat("payments"));
-					System.out.println("Owners Name" + rs.getString("cus_name"));
+					System.out.println("Owners ID: " + rs.getString("owners_id"));
 				
 			}
 		} catch (SQLException | IOException e) {
@@ -253,31 +249,14 @@ public class StorePostgres implements StoreDAO{
 	}
 
 	@Override
-	public boolean itemOffer(int itemID) {
-		// TODO Auto-generated method stub
-		/*
-		 * While(offer not accepted)
-		 * show current offer
-		 * 	if rejected, delete
-		 * 	else if accepted
-		 * 		accept offer
-		 * 		delete all other records
-		 * 		return true
-		 * else 
-		 * 		continue while loop
-		 * 
-		 */
+	public boolean itemOffer(int itemID, Scanner sc) {
 		String sql = "select * from bids where item_id=?";
 		boolean isAccepted = false;
-		Scanner sc = new Scanner(System.in);
-		//information to hold the winning bid
+		
 		int cusId = 0;
 		float offered = 0;
 		float payments =0;
-		//customerid
-		//item id
-		//offered
-		//payments
+		
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1,itemID);
@@ -291,7 +270,7 @@ public class StorePostgres implements StoreDAO{
 					}
 					System.out.println("Item Bid:" + rs.getFloat("item_bid"));
 					System.out.println("Do you accept this bid? [Y] or [N]");
-					if(sc.nextLine().equals("Y")||sc.nextLine().equals("y")) {
+					if(sc.nextLine().equals("Y")) {
 						cusId = rs.getInt("cus_id");
 						offered = rs.getFloat("offered");
 						payments = offered;
@@ -312,14 +291,14 @@ public class StorePostgres implements StoreDAO{
 			ps.setFloat(3, offered);
 			ps.setFloat(4, payments);
 			rs = ps.executeQuery();
-			sc.close();
+			//sc.close();
 			return true;
 			
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sc.close();
+		//sc.close();
 		return false;
 	}
 

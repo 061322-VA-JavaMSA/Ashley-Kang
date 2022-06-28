@@ -17,7 +17,7 @@ import com.revature.util.ConnectionsUtil;
 public class UserPostgres implements UserDAO{	
 	
 	@Override
-	public Customer createUser(Customer cc) {
+	public void createCustomer(Customer cc) {
 		String sql = "insert into customers (username,user_pass,email,cus_name,card_num) values (?,?,?,?,?) returning id;";
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -35,11 +35,10 @@ public class UserPostgres implements UserDAO{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return cc;
 	}
 	
 	@Override
-	public Employee createUser(Employee e) {
+	public void createEmployee(Employee e) {
 		String sql = "insert into employees (username,user_pass,email,emp_name, auth_num) values (?,?,?,?,?) returning id;";
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -57,7 +56,6 @@ public class UserPostgres implements UserDAO{
 			// TODO Auto-generated catch block
 			except.printStackTrace();
 		}
-		return e;
 	}
 
 	
@@ -138,19 +136,14 @@ public class UserPostgres implements UserDAO{
 	}
 
 	@Override
-	public void makeOffer(int amount, int userID, int itemID) {
-		// TODO Auto-generated method stub
-		Scanner sc = new Scanner(System.in);
-		System.out.println("How much would you like to offer for this item?\n Please only include numerical values (decimal or otherwise).");
-		float offer = sc.nextFloat();
-		
+	public void makeOffer(float amount, int userID, int itemID) {
 		String sql = "insert into bids (cus_id,item_id,offered) values (?,?,?);";
 		int rowsChanged = -1;
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
 			ps.setInt(1, userID);
 			ps.setInt(2, itemID);
-			ps.setFloat(3,offer);
+			ps.setFloat(3,amount);
 			rowsChanged = ps.executeUpdate();
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
@@ -160,16 +153,14 @@ public class UserPostgres implements UserDAO{
 	if(rowsChanged > 0) {
 		System.out.println("Offer has been placed.");
 	}
-		sc.close();
 		
 	}
 
 	@Override
-	public List<Item> ownedItems(int userID) {
-		// TODO Auto-generated method stub
+	public ArrayList<Item> ownedItems(int userID) {
 		Item item;
-		List<Item> items = new ArrayList<Item>();
-		String sql = "select * inventory where owners_id = ?;";
+		ArrayList<Item> items = new ArrayList<Item>();
+		String sql = "select * from inventory where owners_id = ?;";
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);	
 			ps.setInt(1, userID);
@@ -177,7 +168,7 @@ public class UserPostgres implements UserDAO{
 			
 			while(rs.next()) {
 				item = new Item();
-				item.setItemID(rs.getInt("itemID"));
+				item.setItemID(rs.getInt("item_id"));
 				item.setItemDescription(rs.getString("item_desc"));
 				item.setItemName(rs.getString("item_name"));
 			    item.setOwned(true);
@@ -194,7 +185,6 @@ public class UserPostgres implements UserDAO{
 
 	@Override
 	public void paymentsLeft(int userID) {
-		// TODO Auto-generated method stub
 		String sql = "select * from bids join inventory on cus_id = owners_id;";
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -380,10 +370,10 @@ public class UserPostgres implements UserDAO{
 	}
 
 	@Override
-	public boolean updateUser(int id, boolean isCust) {
-		Scanner sc = new Scanner(System.in);
+	public boolean updateUser(int id, boolean isCust, Scanner sc) {
+		//Scanner sc = new Scanner(System.in);
 		if(isCust) {
-			String sql="";
+			String sql = "";
 			boolean isQuit = false;
 			while(isQuit == false) {
 			System.out.println("What would you like to update?\n1: Name\n2: Username"
@@ -404,7 +394,7 @@ public class UserPostgres implements UserDAO{
 				}
 			
 			if(rowsChanged > 0) {
-				System.out.println("Update Successful");
+				System.out.println("Name changed successfully.");
 			}
 				break;
 			case "2":
@@ -423,7 +413,7 @@ public class UserPostgres implements UserDAO{
 				}
 			
 			if(rowsChanged > 0) {
-				System.out.println("Update Successful");
+				System.out.println("Username changed successfully.");
 			}
 				break;
 			case "3":
@@ -442,7 +432,7 @@ public class UserPostgres implements UserDAO{
 				}
 			
 			if(rowsChanged > 0) {
-				System.out.println("Update Successful");
+				System.out.println("Password changed successfully.");
 			}
 				break;
 			case "4":
@@ -461,7 +451,7 @@ public class UserPostgres implements UserDAO{
 				}
 			
 			if(rowsChanged > 0) {
-				System.out.println("Update Successful");
+				System.out.println("Email changed successfully.");
 			}
 				break;
 			case "5":
@@ -480,23 +470,24 @@ public class UserPostgres implements UserDAO{
 				}
 			
 			if(rowsChanged > 0) {
-				System.out.println("Update Successful");
+				System.out.println("Card number changed successfully.");
 			}
 				break;
 			case "6":
 				isQuit = true;
 				break;
 			default:
-				System.out.println("Input not found. Try again");
+				System.out.println("Input not found. Try again.");
 				break;
 				}
 			}
-			sc.close();
+			//2
+			//sc.close();
 			return true;
 		}else if(isCust = false){
 			String sql="";
 			boolean isQuit = false;
-			while(isQuit = false) {
+			while(isQuit == false) {
 			System.out.println("What would you like to update?\n1: Name\n2: Username"
 					+ "\n3: Password\n4: Email\n5: Authorization Number\n6: Quit");
 			switch(sc.nextLine()) {
@@ -515,7 +506,7 @@ public class UserPostgres implements UserDAO{
 				}
 			
 			if(rowsChanged > 0) {
-				System.out.println("Update Successful");
+				System.out.println("Name changed successfully.");
 			}
 				break;
 			case "2":
@@ -533,7 +524,7 @@ public class UserPostgres implements UserDAO{
 				}
 			
 			if(rowsChanged > 0) {
-				System.out.println("Update Successful");
+				System.out.println("Username changed successfully.");
 			}
 				break;
 			case "3":
@@ -552,7 +543,7 @@ public class UserPostgres implements UserDAO{
 				}
 			
 			if(rowsChanged > 0) {
-				System.out.println("Update Successful");
+				System.out.println("Password changed successfully.");
 			}
 				break;
 			case "4":
@@ -571,11 +562,11 @@ public class UserPostgres implements UserDAO{
 				}
 			
 			if(rowsChanged > 0) {
-				System.out.println("Update Successful");
+				System.out.println("Email changed successfully.");
 			}
 				break;
 			case "5":
-				System.out.println("Enter new card number.");
+				System.out.println("Enter new authorization key.");
 				sql = "update employees set auth_num = ? where id = ?;";
 			
 				rowsChanged = -1;
@@ -590,21 +581,22 @@ public class UserPostgres implements UserDAO{
 				}
 			
 			if(rowsChanged > 0) {
-				System.out.println("Update Successful");
+				System.out.println("Authorization key changed successfully.");
 			}
 				break;
 			case "6":
 				isQuit = true;
+				//sc.close();
 				break;
 			default:
 				System.out.println("Input not found. Try again");
 				break;
 				}
 			}
-			sc.close();
+			//sc.close();
 			return true;
 		}
-		sc.close();
+		//sc.close();
 		return false;
 	}
 

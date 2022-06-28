@@ -1,6 +1,8 @@
 package com.revature.daos;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.revature.models.Customer;
 import com.revature.models.Employee;
@@ -9,8 +11,8 @@ import com.revature.models.Item;
 
 public interface UserDAO {
 	//Create Customer/Employee
-	Customer createUser(Customer c);
-	Employee createUser(Employee e);
+	void createCustomer(Customer c);
+	void createEmployee(Employee e);
 	
 	//Retrieve Customer/Employee
 	Customer retrieveCByID(int id);
@@ -28,13 +30,13 @@ public interface UserDAO {
 	boolean deleteAll(boolean isCust);
 	
 	//update User info
-	boolean updateUser(int id, boolean isCust);
+	boolean updateUser(int id, boolean isCust, Scanner sc);
 	
 	//make offer for item
-	void makeOffer(int amount, int userID, int itemID);
+	void makeOffer(float amount, int userID, int itemID);
 	
 	//view all owned items
-	List<Item> ownedItems(int userID);
+	ArrayList<Item> ownedItems(int userID);
 	
 	//view payments left
 	void paymentsLeft(int userID);
