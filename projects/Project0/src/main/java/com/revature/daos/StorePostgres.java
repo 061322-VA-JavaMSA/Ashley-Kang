@@ -47,7 +47,7 @@ public class StorePostgres implements StoreDAO{
 		
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				i.setItemID(rs.getInt("id"));
+				i.setItemID(rs.getInt("item_id"));
 				i.setItemCost(rs.getFloat("item_cost"));
 				i.setItemDescription(rs.getString("item_desc"));
 				i.setItemName(rs.getString("item_name"));
@@ -240,7 +240,7 @@ public class StorePostgres implements StoreDAO{
 
 	@Override
 	public Item retrieveByName(String name) {
-		String sql = "select from inventory where item_name = ?;";
+		String sql = "select * from inventory where item_name = ?;";
 		Item i = new Item();
 		try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 			PreparedStatement ps = c.prepareStatement(sql);
@@ -248,8 +248,8 @@ public class StorePostgres implements StoreDAO{
 			
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				i.setItemCost(rs.getFloat("Item_cost"));
-				i.setItemDescription(rs.getString("Item_desc"));
+				i.setItemCost(rs.getFloat("item_cost"));
+				i.setItemDescription(rs.getString("item_desc"));
 				i.setItemID(rs.getInt("item_id"));
 				i.setItemName(rs.getString("item_name"));
 			}

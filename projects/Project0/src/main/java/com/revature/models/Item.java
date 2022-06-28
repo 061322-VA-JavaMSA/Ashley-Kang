@@ -1,7 +1,10 @@
 package com.revature.models;
 
+import java.util.Objects;
+
 public class Item {
 
+	
 	private int itemID;
 	private String itemName;
 	private String itemDescription;
@@ -68,5 +71,24 @@ public class Item {
 				+ ", itemCost=" + itemCost + ", ownerID=" + ownerID + ", isOwned=" + isOwned + "]";
 	}
 
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(isOwned, itemCost, itemDescription, itemID, itemName, ownerID);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Item other = (Item) obj;
+		return isOwned == other.isOwned && Float.floatToIntBits(itemCost) == Float.floatToIntBits(other.itemCost)
+				&& Objects.equals(itemDescription, other.itemDescription) && itemID == other.itemID
+				&& Objects.equals(itemName, other.itemName) && ownerID == other.ownerID;
+	}
 	
 }

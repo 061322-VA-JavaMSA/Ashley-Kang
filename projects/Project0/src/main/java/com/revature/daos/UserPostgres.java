@@ -121,7 +121,7 @@ public class UserPostgres implements UserDAO{
 		}
 			return true;
 		}else if(isCust == false) {
-			String sql = "delete * from employees;";
+			String sql = "delete from employees;";
 			int rowsChanged = -1;
 			try(Connection c = ConnectionsUtil.getConnectionFromFile()){
 				PreparedStatement ps = c.prepareStatement(sql);
