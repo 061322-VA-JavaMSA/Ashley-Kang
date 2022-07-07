@@ -1,6 +1,7 @@
 package com.revature.servlet;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -11,11 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.revature.models.User;
 import com.revature.services.UserService;
+import com.revature.util.CorsFix;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	UserService us = new UserService();
+	private UserService us = new UserService();
+	private ObjectMapper om = new ObjectMapper();
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,7 +39,23 @@ public class UserServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		//doGet(request, response);
+		
+		CorsFix.addCorsHeader(request.getRequestURI(), response);
+		String username = request.getParameter("username");
+
+		try(PrintWriter pw = response.getWriter()){
+			pw.write(om.writeValueAsString(us.getUserByName(username)));
+			response.setStatus(200);
+		}
+		
+		//used to check if it works
+		System.out.println(us.getUserByName(username));
+		//response.setStatus(201);
+		
+		
+		
+		
 	}
 
 }

@@ -8,6 +8,11 @@ import org.hibernate.Session;
 import com.revature.models.User;
 import com.revature.util.HibernateUtil;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+
 public class UserHibernate implements UserDAO{
 
 	@Override
@@ -29,13 +34,36 @@ List<User> users = new ArrayList<User>();
 
 	@Override
 	public User getUserByID(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		User u = null;
+		try(Session s = HibernateUtil.getSessionFactory().openSession()){
+			u = s.get(User.class, id);
+		}
+		return u;
 	}
 
 	@Override
 	public User getUserByName(String username) {
-		// TODO Auto-generated method stub
-		return null;
+User user = null;
+		
+		try(Session s = HibernateUtil.getSessionFactory().openSession();){
+			// SELECT * FROM USERS WHERE USERNAME = '';
+			
+			CriteriaBuilder cb = s.getCriteriaBuilder();
+			CriteriaQuery<User> cq = cb.createQuery(User.class);
+			// define entity to be searched
+			Root<User> root = cq.from(User.class);
+			
+			//define conditions
+			Predicate predicateForUsername = cb.equal(root.get("username"), username);
+//			Predicate predicateForSomethingElse = cb.equal(root.get("password"), password);
+//			Predicate predicateFromUnameAndPass = cb.and(predicateForUsername, predicateForSomethingElse);
+			
+			cq.select(root).where(predicateForUsername);
+			
+			// retrieves the result
+			user = (User) s.createQuery(cq).getSingleResult();
+		}
+		
+		return user;
 	}
 }
