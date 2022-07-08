@@ -10,9 +10,9 @@ public interface TicketDAO {
 	
 	public int insertTicket(Ticket t) throws TicketNotCreatedException;
 	public Ticket getTicketByID(int id) throws TicketNotFoundException;
-	//public Ticket getTicketByStatus();
-	public Ticket getTicketByEmpID(int empID) throws TicketNotFoundException;
-	public Ticket getTicketByManID(int manID) throws TicketNotFoundException;
+
+	public List<Ticket> getTicketByEmpID(int empID);
+	public List<Ticket> getTicketByManID(int manID);
 	public List<Ticket> getAllTickets();
 	public List<Ticket> getPendTickets();
 	public List<Ticket> getDenTickets();

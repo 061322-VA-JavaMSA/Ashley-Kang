@@ -13,14 +13,14 @@ import jakarta.persistence.Table;
 @Table(name = "tickets")
 public class Ticket {
 	
-	enum Type{
+	public enum Type{
 		LODGING,
 		TRAVEL,
 		FOOD,
 		OTHER
 	}
 	
-	enum Status{
+	public enum Status{
 		APPROVED,
 		PENDING,
 		DENIED
@@ -37,10 +37,10 @@ public class Ticket {
 	private float ticket_amount;
 	
 	@Column (name = "employee_id")
-	private String employee_name;
+	private int employee_id;
 	
 	@Column (name = "manager_id")
-	private String manager_name;
+	private int manager_id;
 	
 	@Enumerated(EnumType.STRING)
 	@Column (name = "ticket_ty")
@@ -70,17 +70,17 @@ public class Ticket {
 		this.ticket_amount = ticket_amount;
 	}
 	
-	public String getEmployee_name() {
-		return employee_name;
+	public int getEmployee_id() {
+		return employee_id;
 	}
-	public void setEmployee_name(User employee) {
-		this.employee_name = employee.getUser_name();
+	public void setEmployee_id(int id) {
+		this.employee_id = id;
 	}
-	public String getManager_name() {
-		return manager_name;
+	public int getManager_id() {
+		return manager_id;
 	}
-	public void setManager_name(User manager) {
-		this.manager_name = manager.getUser_name();
+	public void setManager_id(int id) {
+		this.manager_id = id;
 	}
 	public Type getType() {
 		return type;
@@ -96,7 +96,7 @@ public class Ticket {
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(employee_name, id, manager_name, status, ticket_amount, ticket_desc, type);
+		return Objects.hash(employee_id, id, manager_id, status, ticket_amount, ticket_desc, type);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -107,15 +107,15 @@ public class Ticket {
 		if (getClass() != obj.getClass())
 			return false;
 		Ticket other = (Ticket) obj;
-		return Objects.equals(employee_name, other.employee_name) && id == other.id
-				&& Objects.equals(manager_name, other.manager_name) && status == other.status
+		return employee_id == other.employee_id && id == other.id && manager_id == other.manager_id
+				&& status == other.status
 				&& Float.floatToIntBits(ticket_amount) == Float.floatToIntBits(other.ticket_amount)
 				&& Objects.equals(ticket_desc, other.ticket_desc) && type == other.type;
 	}
 	@Override
 	public String toString() {
 		return "Ticket [id=" + id + ", ticket_desc=" + ticket_desc + ", ticket_amount=" + ticket_amount
-				+ ", employee_name=" + employee_name + ", manager_name=" + manager_name + ", type=" + type + ", status="
+				+ ", employee_id=" + employee_id + ", manager_id=" + manager_id + ", type=" + type + ", status="
 				+ status + "]";
 	}
 	

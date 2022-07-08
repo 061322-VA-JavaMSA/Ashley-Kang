@@ -8,6 +8,36 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>UserServlet</servlet-name>
-    <url-pattern>/UserServlet</url-pattern>
+    <url-pattern>/users</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AuthServlet</display-name>
+    <servlet-name>AuthServlet</servlet-name>
+    <servlet-class>com.revature.servlet.AuthServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AuthServlet</servlet-name>
+    <url-pattern>/auth</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RequestServlet</display-name>
+    <servlet-name>RequestServlet</servlet-name>
+    <servlet-class>com.revature.servlet.RequestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RequestServlet</servlet-name>
+    <url-pattern>/requests</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AccountServlet</display-name>
+    <servlet-name>AccountServlet</servlet-name>
+    <servlet-class>com.revature.servlet.AccountServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AccountServlet</servlet-name>
+    <url-pattern>/account</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.daos.TicketHibernate;
@@ -30,25 +31,11 @@ public class TicketService {
 		return t;
 	}
 	
-	public Ticket getTicketByEmpID(int empID) {
-		Ticket t = null;
-		try {
-			t =  th.getTicketByEmpID(empID);
-		} catch (TicketNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return t;
+	public List<Ticket> getTicketByEmpID(int empID) {
+		return th.getTicketByEmpID(empID);
 	}
-	public Ticket getTicketByManID(int manID) {
-		Ticket t = null;
-		try {
-			t =  th.getTicketByManID(manID);
-		} catch (TicketNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return t;
+	public List<Ticket> getTicketByManID(int manID) {
+		return th.getTicketByManID(manID);
 	}
 	public List<Ticket> getAllTickets(){
 		return th.getAllTickets();

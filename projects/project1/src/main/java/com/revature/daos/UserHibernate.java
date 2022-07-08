@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
+import com.revature.dtos.UserDTO;
 import com.revature.exceptions.UserNotCreatedException;
 import com.revature.exceptions.UserNotFoundException;
 import com.revature.models.User;
@@ -20,14 +21,20 @@ import jakarta.persistence.criteria.Root;
 public class UserHibernate implements UserDAO{
 
 	@Override
-	public List<User> getUsers(){
+	public List<UserDTO> getUsers(){
 		List<User> users = new ArrayList<User>();
 		
 		try(Session s = HibernateUtil.getSessionFactory().openSession()){
 			users = s.createQuery("from User", User.class).list();
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 		
-		return users;
+		List<UserDTO> usersDTO = new ArrayList<UserDTO>();
+		for(User u: users) {
+			usersDTO.add(new UserDTO(u));
+		}
+		return usersDTO;
 	}
 
 	@Override

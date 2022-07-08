@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "users")
 public class User {
-	enum Role{
+	public enum Role{
 		EMPLOYEE,
 		MANAGER
 	}

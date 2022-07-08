@@ -6,7 +6,7 @@ async function userLogin(){
     let username = document.getElementById('userName').value;
     let password = document.getElementById('userPass').value;
 
-    let response = await fetch(`${apiUrl}`,{
+    let response = await fetch(`${apiUrl}/users`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'

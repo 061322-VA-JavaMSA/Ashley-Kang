@@ -20,9 +20,8 @@ public class UserServlet extends HttpServlet {
 	private UserService us = new UserService();
 	private ObjectMapper om = new ObjectMapper();
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	//view all employees
+	//view single employee?
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
@@ -33,10 +32,8 @@ public class UserServlet extends HttpServlet {
 		pw.close();
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	//not necessary
+	/*protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		
@@ -52,9 +49,6 @@ public class UserServlet extends HttpServlet {
 		System.out.println(us.getUserByName(username));
 		//response.setStatus(201);
 		
-		
-		
-		
-	}
+	}*/
 
 }

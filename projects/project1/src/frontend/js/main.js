@@ -1,1 +1,1 @@
-let apiUrl = 'http://localhost:8080/project1/UserServlet';
+let apiUrl = 'http://localhost:8080/project1';

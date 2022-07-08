@@ -53,8 +53,8 @@ public class TicketHibernate implements TicketDAO{
 	}
 
 	@Override
-	public Ticket getTicketByEmpID(int empID) throws TicketNotFoundException {
-		Ticket t = null;
+	public List<Ticket> getTicketByEmpID(int empID) {
+		List<Ticket> t = new ArrayList<Ticket>();
 		try(Session s = HibernateUtil.getSessionFactory().openSession();){			
 			CriteriaBuilder cb = s.getCriteriaBuilder();
 			CriteriaQuery<Ticket> cq = cb.createQuery(Ticket.class);
@@ -64,19 +64,15 @@ public class TicketHibernate implements TicketDAO{
 			cq.select(root).where(predicateForEmpID);
 			
 		
-			t = (Ticket) s.createQuery(cq).getSingleResult();
+			t = s.createQuery(cq).getResultList();
 		}
 		
-		if(t == null) {
-			throw new TicketNotFoundException();
-		}else {
-			return t;
-		}
+		return t;
 	}
 
 	@Override
-	public Ticket getTicketByManID(int manID) throws TicketNotFoundException {
-		Ticket t = null;
+	public List<Ticket> getTicketByManID(int manID){
+		List<Ticket> t = new ArrayList<Ticket>();
 		try(Session s = HibernateUtil.getSessionFactory().openSession();){			
 			CriteriaBuilder cb = s.getCriteriaBuilder();
 			CriteriaQuery<Ticket> cq = cb.createQuery(Ticket.class);
@@ -84,14 +80,10 @@ public class TicketHibernate implements TicketDAO{
 			
 			Predicate predicateForEmpID = cb.equal(root.get("manager_id"), manID);
 			cq.select(root).where(predicateForEmpID);		
-			t = (Ticket) s.createQuery(cq).getSingleResult();
+			t = s.createQuery(cq).getResultList();
 		}
 		
-		if(t == null) {
-			throw new TicketNotFoundException();
-		}else {
-			return t;
-		}
+		return t;
 	}
 
 	@Override
