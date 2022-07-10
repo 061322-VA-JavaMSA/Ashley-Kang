@@ -3,6 +3,7 @@ package com.revature.services;
 import java.util.List;
 
 import com.revature.daos.UserHibernate;
+import com.revature.dtos.UserDTO;
 import com.revature.exceptions.UserNotCreatedException;
 import com.revature.exceptions.UserNotFoundException;
 import com.revature.models.User;
@@ -10,7 +11,7 @@ import com.revature.models.User;
 public class UserService {
 	UserHibernate uh = new UserHibernate();
 	
-	public List<User> getUsers(){
+	public List<UserDTO> getUsers(){
 		return uh.getUsers();
 	}
 	
@@ -43,6 +44,18 @@ public class UserService {
 			e.printStackTrace();
 		}
 		return u;
+		
+	}
+	
+	public void updateUN(String username) {
+		
+	}
+	
+	public void updateP(String pass) {
+		
+	}
+	
+	public void updateN(String n) {
 		
 	}
 	

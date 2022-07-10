@@ -29,8 +29,7 @@ public class RequestServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CorsFix.addCorsHeader(request.getRequestURI(), response);
 		
-		HttpSession session = request.getSession();
-		int userID = (int) session.getAttribute("user_id");
+		int userID = Integer.parseInt(request.getParameter("userID"));
 		User u = us.getUserByID(userID);
 		
 		if(u.getRole() == User.Role.MANAGER) {
@@ -56,20 +55,24 @@ public class RequestServlet extends HttpServlet {
 	}
 
 	//submit tickets via employee
+	//FIXME
+	//USER ID IS NULL OR TICKET DOES NOT HAVE REQUIRED PERSISTER
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CorsFix.addCorsHeader(request.getRequestURI(), response);
 		
 		String ticketType = request.getParameter("type");
 		String ticketDesc = request.getParameter("desc");
 		Float ticketAmount = Float.parseFloat(request.getParameter("amount"));
+		int userID = Integer.parseInt(request.getParameter("userID"));
 	
 		
 		//retrieve employees id
-		HttpSession session = request.getSession();
 		Ticket t = new Ticket();
 		t.setStatus(Ticket.Status.PENDING);
 		t.setType(Ticket.Type.valueOf(ticketType));
-		t.setEmployee_id((int) session.getAttribute("user_id"));
+		System.out.println("User_ROLE" + request.getSession().getAttribute("userRole"));
+		System.out.println("User_ID" + request.getSession().getAttribute("userID"));
+		t.setEmployee_id(userID);
 		t.setTicket_amount(ticketAmount);
 		t.setTicket_desc(ticketDesc);
 		try {
@@ -82,6 +85,11 @@ public class RequestServlet extends HttpServlet {
 		}
 		
 		//created the ticket successfully
+		try(PrintWriter pw = response.getWriter()){
+			pw.write(om.writeValueAsString(t));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		response.setStatus(201);
 	}
 	

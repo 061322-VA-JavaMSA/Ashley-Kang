@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.revature.dtos.UserDTO;
 import com.revature.models.User;
 import com.revature.services.UserService;
 import com.revature.util.CorsFix;
@@ -23,32 +24,37 @@ public class UserServlet extends HttpServlet {
 	//view all employees
 	//view single employee?
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		List<User> users = us.getUsers();
-		PrintWriter pw = response.getWriter();
-		//pw.write("Hello from UserServlet");
-		pw.write(users.get(1).toString());
-		pw.close();
-	}
-
-	//not necessary
-	/*protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//doGet(request, response);
-		
 		CorsFix.addCorsHeader(request.getRequestURI(), response);
-		String username = request.getParameter("username");
+		String pathInfo = request.getPathInfo();
+		
+		if(pathInfo == null) {
+			List<UserDTO> users = us.getUsers();
+			try(PrintWriter pw = response.getWriter()){
+				pw.write(om.writeValueAsString(users));
+				response.setStatus(200);
+				pw.close();
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else {
+			int id = Integer.parseInt(pathInfo.substring(1));
+			try (PrintWriter pw = response.getWriter()) {
+				
+				User u = us.getUserByID(id);
+				UserDTO uDTO = new UserDTO(u);
+				pw.write(om.writeValueAsString(uDTO));
 
-		try(PrintWriter pw = response.getWriter()){
-			pw.write(om.writeValueAsString(us.getUserByName(username)));
-			response.setStatus(200);
+				response.setStatus(200);
+			} catch (Exception e) {
+				response.setStatus(404);
+			}
 		}
-		
-		//used to check if it works
-		System.out.println(us.getUserByName(username));
-		//response.setStatus(201);
-		
-	}*/
-
+	
+	}
+	
+	@Override
+	protected void doOptions(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		CorsFix.addCorsHeader(req.getRequestURI(), res);
+		super.doOptions(req, res);
+	}
 }

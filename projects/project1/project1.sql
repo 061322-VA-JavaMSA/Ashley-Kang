@@ -36,3 +36,9 @@ employee_id integer references users(user_id),
 manager_id integer references users(user_id),
 ticket_stat ticket_status
 );
+
+
+--populate tickets table
+insert into tickets(ticket_ty,ticket_desc,ticket_amount,employee_id, manager_id, ticket_stat) values ('FOOD','Bought McDonalds', '10.67', '1', '3', 'APPROVED');
+insert into tickets(ticket_ty,ticket_desc,ticket_amount,employee_id, ticket_stat) values ('TRAVEL','Drove 100 Miles', '500', '1','PENDING');
+insert into tickets(ticket_ty,ticket_desc,ticket_amount,employee_id, manager_id, ticket_stat) values ('OTHER','Bought a smartwatch', '50', '2', '4', 'DENIED');

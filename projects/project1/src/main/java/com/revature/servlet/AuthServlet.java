@@ -33,9 +33,9 @@ public class AuthServlet extends HttpServlet {
 			if(!principal.getUser_pass().equals(password)) {
 				throw new UserNotFoundException();
 			}else {
-				HttpSession session = request.getSession();
-				session.setAttribute("user_id", principal.getId());
-				session.setAttribute("user_role", principal.getRole());
+				request.getSession().setAttribute("userID", principal.getId());
+				System.out.println(request.getSession().getAttribute("userID"));
+				request.getSession().setAttribute("userRole", principal.getRole());
 				response.setStatus(200);
 				
 				String cookie = response.getHeader("Set-Cookie") + "; SameSite=None; Secure";
@@ -57,18 +57,15 @@ public class AuthServlet extends HttpServlet {
 	}
 	
 	
-	/*
-	 *logout
-	 * protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException{
+	protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException{
 		CorsFix.addCorsHeader(req.getRequestURI(), res);
 		
 		HttpSession session = req.getSession();
 		
 		session.invalidate();
-	}*/
+	}
 	
 	
-	// used to prevent CORS preflight issue
 	@Override
 	protected void doOptions(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		CorsFix.addCorsHeader(req.getRequestURI(), res);
