@@ -22,8 +22,8 @@ public class AccountServlet extends HttpServlet {
 	//retrieve account details
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CorsFix.addCorsHeader(request.getRequestURI(), response);
-		
-		int userID = Integer.parseInt(request.getParameter("userID"));
+		String pathInfo = request.getPathInfo();
+		int userID = Integer.parseInt(pathInfo.substring(1));
 		User u = us.getUserByID(userID);
 		
 		try(PrintWriter pw = response.getWriter()){
@@ -37,33 +37,37 @@ public class AccountServlet extends HttpServlet {
 	}
 
 	//update account details
+	//doPut?
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CorsFix.addCorsHeader(request.getRequestURI(), response);
 		
+		String id = request.getParameter("id");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String name = request.getParameter("name");
 		
+		User u = us.getUserByID(Integer.parseInt(id));
+		
 		if(username!=null) {
-			us.updateUN(username);
+			us.updateUN(username, u.getUsername());
 			response.setStatus(200);
 			
 		}else if(password!=null) {
-			us.updateP(password);
+			us.updateP(password, u.getId());
 			response.setStatus(200);
 		
 		}else if(name!= null) {
-			us.updateN(name);
+			us.updateN(name, u.getId());
 			response.setStatus(200);
 		}else {
 			//invalid
 			response.setStatus(400);
 		}
 	
-		UserDTO u = new UserDTO(us.getUserByName(username));
+		UserDTO user = new UserDTO(us.getUserByName(username));
 		//updated info correctly
 		try(PrintWriter pw = response.getWriter()){
-			pw.write(om.writeValueAsString(u));
+			pw.write(om.writeValueAsString(user));
 			pw.close();
 		}catch (Exception e) {
 			e.printStackTrace();

@@ -29,28 +29,25 @@ public class RequestServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CorsFix.addCorsHeader(request.getRequestURI(), response);
 		
-		int userID = Integer.parseInt(request.getParameter("userID"));
-		User u = us.getUserByID(userID);
 		
-		if(u.getRole() == User.Role.MANAGER) {
-			try(PrintWriter pw = response.getWriter()){
-				pw.write(om.writeValueAsString(ts.getAllTickets()));
-				response.setStatus(200);
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}else if(u.getRole() == User.Role.EMPLOYEE) {
-			
+		String pathInfo = request.getPathInfo();
+		if(pathInfo != null) {
+			int userID = Integer.parseInt(pathInfo.substring(1));
+			//User u = us.getUserByID(userID);
 			try(PrintWriter pw = response.getWriter()){
 				pw.write(om.writeValueAsString(ts.getTicketByEmpID(userID)));
 				response.setStatus(200);
 			}catch (Exception e) {
 				e.printStackTrace();
+				response.setStatus(400);			}
+		}else {
+			try(PrintWriter pw = response.getWriter()){
+				pw.write(om.writeValueAsString(ts.getAllTickets()));
+				response.setStatus(200);
+			}catch (Exception e) {
+				e.printStackTrace();
+				response.setStatus(400);
 			}
-		}else
-		{
-			//invalid operation
-			response.setStatus(400);
 		}
 	}
 

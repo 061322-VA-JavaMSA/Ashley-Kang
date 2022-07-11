@@ -1,0 +1,53 @@
+html {
+    background-color: #fdede5;
+}
+
+h1,h2,h3,h4,h5,h6{
+    text-align: center;
+}
+
+.logInfo {
+    margin: auto;
+    display: block;
+    width: 25%;
+    border: 2px #555;
+    padding: 4px;
+}
+
+.logInfo input:focus {
+    border: 2px solid black;
+}
+
+.logInfo button{
+    padding:4px;
+    background-color:#f2b76a;
+    border:none;
+}
+
+.logInfo button:hover{
+    background-color:#f2cb97;
+}
+
+
+
+table {
+
+}
+
+tr{
+
+}
+
+td{
+
+}
+
+nav{
+    background-color: black;
+}
+
+nav ul li a{
+    float: left;
+    text-align: center;
+    background-color: white;
+}

@@ -28,7 +28,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>RequestServlet</servlet-name>
-    <url-pattern>/requests</url-pattern>
+    <url-pattern>/requests/*</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -38,6 +38,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>AccountServlet</servlet-name>
-    <url-pattern>/account</url-pattern>
+    <url-pattern>/account/*</url-pattern>
   </servlet-mapping>
 </web-app>

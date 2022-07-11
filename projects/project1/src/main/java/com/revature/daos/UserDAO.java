@@ -13,7 +13,9 @@ public interface UserDAO {
 	public User getUserByID(int id) throws UserNotFoundException;
 	public User getUserByName(String username) throws UserNotFoundException;
 	public List<UserDTO> getUsers();
+	public void updateUN(String username, String oldName) throws UserNotFoundException;
 	
-	//update user info
-	//public void updateUser(String input);
+	public void updateP(String pass, int ID) throws UserNotFoundException;
+	
+	public void updateN(String n, int ID) throws UserNotFoundException;
 }

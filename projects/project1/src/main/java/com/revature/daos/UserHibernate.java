@@ -15,6 +15,7 @@ import com.revature.util.HibernateUtil;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
@@ -78,8 +79,6 @@ public class UserHibernate implements UserDAO{
 			Root<User> root = cq.from(User.class);
 			
 			Predicate predicateForUsername = cb.equal(root.get("username"), username);
-//			Predicate predicateForSomethingElse = cb.equal(root.get("password"), password);
-//			Predicate predicateFromUnameAndPass = cb.and(predicateForUsername, predicateForSomethingElse);
 			
 			cq.select(root).where(predicateForUsername);
 			
@@ -95,4 +94,61 @@ public class UserHibernate implements UserDAO{
 		}
 		
 	}
+
+	@Override
+	public void updateUN(String username, String oldname) throws UserNotFoundException{
+		User u = getUserByName(oldname);
+		
+		if(u == null) {
+			throw new UserNotFoundException();
+		}
+		
+		try(Session s = HibernateUtil.getSessionFactory().openSession();){			
+			CriteriaBuilder cb = s.getCriteriaBuilder();
+			CriteriaUpdate<User> criteriaUpdate = cb.createCriteriaUpdate(User.class);
+			Root<User> root = criteriaUpdate.from(User.class);
+			criteriaUpdate.set("username", username);
+			criteriaUpdate.where(cb.equal(root.get("username"), oldname));
+			Transaction transaction = s.beginTransaction();
+			s.createQuery(criteriaUpdate).executeUpdate();
+			transaction.commit();
+		}
+	}
+
+	@Override
+	public void updateP(String pass, int id) throws UserNotFoundException{
+		User u = getUserByID(id);
+		if(u == null) {
+			throw new UserNotFoundException();
+		}
+		try(Session s = HibernateUtil.getSessionFactory().openSession();){			
+			CriteriaBuilder cb = s.getCriteriaBuilder();
+			CriteriaUpdate<User> criteriaUpdate = cb.createCriteriaUpdate(User.class);
+			Root<User> root = criteriaUpdate.from(User.class);
+			criteriaUpdate.set("user_pass", pass);
+			criteriaUpdate.where(cb.equal(root.get("user_id"), id));
+			Transaction transaction = s.beginTransaction();
+			s.createQuery(criteriaUpdate).executeUpdate();
+			transaction.commit();
+		}
+	}
+
+	@Override
+	public void updateN(String n, int id) throws UserNotFoundException{
+		User u = getUserByID(id);
+		if(u == null) {
+			throw new UserNotFoundException();
+		}
+		try(Session s = HibernateUtil.getSessionFactory().openSession();){			
+			CriteriaBuilder cb = s.getCriteriaBuilder();
+			CriteriaUpdate<User> criteriaUpdate = cb.createCriteriaUpdate(User.class);
+			Root<User> root = criteriaUpdate.from(User.class);
+			criteriaUpdate.set("user_name", n);
+			criteriaUpdate.where(cb.equal(root.get("user_id"), id));
+			Transaction transaction = s.beginTransaction();
+			s.createQuery(criteriaUpdate).executeUpdate();
+			transaction.commit();
+		}
+	}
+
 }

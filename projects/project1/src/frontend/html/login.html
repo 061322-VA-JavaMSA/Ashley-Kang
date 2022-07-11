@@ -1,23 +1,31 @@
 <html>
     <head>
         <meta charset="UTF-8"/>
-        <title>Login</title>
+        <title>Login to Portal</title>
+        <link rel="stylesheet" href="../css/main.css"/>
     </head>
     <body>
         <main>
+            
             Employee Reimbursment Service
             <br>
-            <input type="text" id="userName" />
-            <input type="text" id="userPass" />
-            <button type="button" id="login">Login</button>
-            <a href = "accountEmp.html"> Eemployee Account</a>
-            <a href = "accountMan.html"> Manager Account</a>
-            <a href = "homepage.html">Homepage</a>
-            <a href = "login.html">Login</a>
-            <a href = "submitreq.html">Submit Requests</a>
-            <a href = "viewEmp.html"> View Employee</a>
-            <a href = "viewreq.html">View Requests</a>
-            <a href = "viewreqM.html">View Requests</a>
+            <div class="navbar">
+                <section>
+                    <a href = "account.html"> Eemployee Account</a>
+                    <a href = "homepage.html">Homepage</a>
+                    <a href = "login.html">Login</a>
+                    <a href = "submitreq.html">Submit Requests</a>
+                    <a href = "viewEmp.html"> View Employee</a>
+                    <a href = "viewreq.html">View Requests</a>
+                </section>
+            </div>
+            <div class = "logInfo">
+                <input type="text" id="userName"/>
+                <br>
+                <input type="text" id="userPass" />
+                <br>
+                <button type="button" id="login">Login</button>
+            </div>
         </main>
         <script src="../js/main.js"></script>
         <script src="../js/login.js"></script>
