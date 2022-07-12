@@ -1,27 +1,51 @@
 html {
-    background-color: #fdede5;
+    background-color: #f9e2c4;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-style: normal;
 }
 
 h1,h2,h3,h4,h5,h6{
     text-align: center;
+    font-weight: normal;
 }
 
+
 .logInfo {
-    margin: auto;
-    display: block;
-    width: 25%;
-    border: 2px #555;
-    padding: 4px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    background: #fff;
+    width: 285px;
+    margin: -140px 0 0 -182px;
+    padding: 40px;
+}
+
+.logInfo input{
+    outline: none;
+      display: block;
+      width: 100%;
+      margin: 0 0 20px;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      font-family: Arial, Helvetica, sans-serif;
+      box-sizing: border-box;
+      font-size: 14px;
 }
 
 .logInfo input:focus {
-    border: 2px solid black;
+        border: 1px solid #f8d8ae;
 }
 
 .logInfo button{
-    padding:4px;
-    background-color:#f2b76a;
-    border:none;
+    cursor: pointer;
+    background: #fdc47a;
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
 }
 
 .logInfo button:hover{
@@ -30,24 +54,42 @@ h1,h2,h3,h4,h5,h6{
 
 
 
-table {
-
+nav ul {
+    list-style-type: none;
+    padding:0;
+    overflow: hidden;
+    background: #fff; 
 }
 
-tr{
-
-}
-
-td{
-
-}
-
-nav{
-    background-color: black;
-}
-
-nav ul li a{
+nav ul li{
     float: left;
-    text-align: center;
-    background-color: white;
 }
+
+nav ul li a {
+    text-align: center;
+    padding: 20px 20px;
+    color: black;
+    display: block;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    cursor:pointer;
+    background-color:#f2cb97;
+}
+
+table{
+    border-collapse: collapse;
+    padding: 14px;
+    text-align:left;
+}
+table, td {
+    border: 1px dotted;
+}
+
+
+footer{
+    background-color:  aliceblue;
+    text-align: center;
+    padding: 1px;
+    }
