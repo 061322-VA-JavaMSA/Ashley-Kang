@@ -16,7 +16,12 @@ else{
 }
 
 function navBar(){
+    button.id = 'Logout';
     let li = document.createElement('li');
+    li.appendChild(button);
+    navigationBarUL.appendChild(li);
+
+    li = document.createElement('li');
     let a = document.createElement('a');
     li = document.createElement('li');
     a = document.createElement('a');

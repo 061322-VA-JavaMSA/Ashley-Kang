@@ -15,7 +15,6 @@ async function viewDetails(){
     if(response.status = 200){
         let data = await response.json();
         console.log(response.status);
-        console.log(data);
     } else{
         console.log('Unable to login.')
     }
