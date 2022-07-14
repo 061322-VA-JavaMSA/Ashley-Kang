@@ -21,8 +21,7 @@ public class UserServlet extends HttpServlet {
 	private UserService us = new UserService();
 	private ObjectMapper om = new ObjectMapper();
 
-	//view all employees
-	//view single employee?
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CorsFix.addCorsHeader(request.getRequestURI(), response);
 		String pathInfo = request.getPathInfo();

@@ -79,12 +79,20 @@ nav ul li a:hover {
 }
 
 table{
+    background: #fff;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
     border-collapse: collapse;
     padding: 14px;
-    text-align:left;
+    text-align: left;
 }
-table, td {
-    border: 1px dotted;
+table, tr,th {
+    border: 1px solid;
+}
+
+th{
+    background:#fdc47a;
 }
 
 
