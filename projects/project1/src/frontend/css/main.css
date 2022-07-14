@@ -65,7 +65,23 @@ nav ul li{
     float: left;
 }
 
+nav ul li button{
+    text-align: center;
+    border:none;
+    padding: 20px  30px;
+    text-decoration: none;
+    background-color:white;
+    font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+}
+
+nav ul li button:hover{
+    cursor:pointer;
+    background-color:#f2cb97;
+}
+
 nav ul li a {
+    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     padding: 20px 20px;
     color: black;

@@ -41,4 +41,5 @@ ticket_stat varchar(30)
 --populate tickets table
 insert into tickets(ticket_ty,ticket_desc,ticket_amount,employee_id, manager_id, ticket_stat) values ('FOOD','Bought McDonalds', '10.67', '1', '3', 'APPROVED');
 insert into tickets(ticket_ty,ticket_desc,ticket_amount,employee_id, ticket_stat) values ('TRAVEL','Drove 100 Miles', '500', '1','PENDING');
+update tickets set manager_id = 1 where ticket_id = 1;
 insert into tickets(ticket_ty,ticket_desc,ticket_amount,employee_id, manager_id, ticket_stat) values ('OTHER','Bought a smartwatch', '50', '2', '4', 'DENIED');

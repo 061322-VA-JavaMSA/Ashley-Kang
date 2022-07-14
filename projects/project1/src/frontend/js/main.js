@@ -17,6 +17,7 @@ else{
 
 function navBar(){
     button.id = 'Logout';
+    button.innerHTML = 'Logout';
     let li = document.createElement('li');
     li.appendChild(button);
     navigationBarUL.appendChild(li);
