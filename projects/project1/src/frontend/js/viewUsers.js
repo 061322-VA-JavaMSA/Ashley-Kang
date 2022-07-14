@@ -3,6 +3,10 @@ getUsers();
 async function getUsers(){
 
     let response = await fetch(`${apiUrl}/users`, {
+        method: 'GET',
+        headers: {
+           'Content-Type': 'application/x-www-form-urlencoded'
+        }
     });
 
     if(response.status == 200){

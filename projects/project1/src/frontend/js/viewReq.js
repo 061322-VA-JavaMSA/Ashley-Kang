@@ -3,10 +3,9 @@ viewTicket();
 async function viewTicket(){
     console.log(principalString);
     console.log('button was clicked');
-    let uID = principal.id;
 
     if(principal.role = 'EMPLOYEE'){
-        let response = await fetch(`${apiUrl}/requests/${uID}`, {
+        let response = await fetch(`${apiUrl}/requests/${principal.id}`, {
             method: 'GET',
             headers: {
                'Content-Type': 'application/x-www-form-urlencoded'

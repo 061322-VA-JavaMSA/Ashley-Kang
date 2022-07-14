@@ -7,9 +7,8 @@ async function submitTicket(){
     let ticketType = document.getElementById('type').value.toUpperCase();
     let ticketDesc = document.getElementById('desc').value;
     let ticketAmount = document.getElementById('amount').value;
-    let uID = principal.id;
 
-    let response = await fetch(`${apiUrl}/requests`,{
+    let response = await fetch(`${apiUrl}/requests/${principal.id}`,{
         method: 'POST',
         headers: {
            'Content-Type': 'application/x-www-form-urlencoded'
@@ -17,8 +16,7 @@ async function submitTicket(){
         body: new URLSearchParams({
            'type': `${ticketType}`,
             'desc': `${ticketDesc}`,
-            'amount': `${ticketAmount}`,
-            'userID': `${uID}`
+            'amount': `${ticketAmount}`
         })
     });
 

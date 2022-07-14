@@ -36,38 +36,39 @@ public class AccountServlet extends HttpServlet {
 		
 	}
 
-	//update account details
-	//doPut?
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	
+	 protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CorsFix.addCorsHeader(request.getRequestURI(), response);
 		
-		String id = request.getParameter("id");
+		
+		String pathInfo = request.getPathInfo();
+		int id = Integer.parseInt(pathInfo.substring(1));
+		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String name = request.getParameter("name");
 		
-		User u = us.getUserByID(Integer.parseInt(id));
+		User u = us.getUserByID(id);
 		
-		if(username!=null) {
+		if(username!="") {
 			us.updateUN(username, u.getUsername());
 			response.setStatus(200);
 			
-		}else if(password!=null) {
+		}
+		if(password!="") {
 			us.updateP(password, u.getId());
 			response.setStatus(200);
 		
-		}else if(name!= null) {
+		}
+		if(name!= "") {
 			us.updateN(name, u.getId());
 			response.setStatus(200);
-		}else {
-			//invalid
-			response.setStatus(400);
 		}
 	
-		UserDTO user = new UserDTO(us.getUserByName(username));
 		//updated info correctly
 		try(PrintWriter pw = response.getWriter()){
-			pw.write(om.writeValueAsString(user));
+			pw.write(om.writeValueAsString(u));
 			pw.close();
 		}catch (Exception e) {
 			e.printStackTrace();

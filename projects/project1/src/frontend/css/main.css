@@ -88,6 +88,59 @@ table, td {
 }
 
 
+
+.accountInfo {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    background: #fff;
+    width: 285px;
+    margin: -140px 0 0 -182px;
+    padding: 40px;
+}
+
+.accountInfo input{
+    outline: none;
+      display: block;
+      width: 100%;
+      margin: 0 0 20px;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      font-family: Arial, Helvetica, sans-serif;
+      box-sizing: border-box;
+      font-size: 14px;
+}
+
+.accountInfo input:focus {
+        border: 1px solid #f8d8ae;
+}
+
+.accountInfo button{
+    cursor: pointer;
+    background: #fdc47a;
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+}
+
+.accountInfo button:hover{
+    background-color:#f2cb97;
+}
+
+p{
+    text-align: center;
+}
+
+hr{
+    background-color:#fdc47a;
+    height: 2px;
+}
+
+
+
 footer{
     background-color:  aliceblue;
     text-align: center;

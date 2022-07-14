@@ -126,7 +126,7 @@ public class UserHibernate implements UserDAO{
 			CriteriaUpdate<User> criteriaUpdate = cb.createCriteriaUpdate(User.class);
 			Root<User> root = criteriaUpdate.from(User.class);
 			criteriaUpdate.set("user_pass", pass);
-			criteriaUpdate.where(cb.equal(root.get("user_id"), id));
+			criteriaUpdate.where(cb.equal(root.get("id"), id));
 			Transaction transaction = s.beginTransaction();
 			s.createQuery(criteriaUpdate).executeUpdate();
 			transaction.commit();
@@ -144,7 +144,7 @@ public class UserHibernate implements UserDAO{
 			CriteriaUpdate<User> criteriaUpdate = cb.createCriteriaUpdate(User.class);
 			Root<User> root = criteriaUpdate.from(User.class);
 			criteriaUpdate.set("user_name", n);
-			criteriaUpdate.where(cb.equal(root.get("user_id"), id));
+			criteriaUpdate.where(cb.equal(root.get("id"), id));
 			Transaction transaction = s.beginTransaction();
 			s.createQuery(criteriaUpdate).executeUpdate();
 			transaction.commit();
