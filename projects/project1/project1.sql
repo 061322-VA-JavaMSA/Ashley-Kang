@@ -29,12 +29,12 @@ insert into users(user_name,username,user_pass,user_role) values ('Lucas','Lucas
 drop table if exists tickets;
 create table if not exists tickets(
 ticket_id serial primary key,
-ticket_ty ticket_type,
+ticket_ty varchar(30),
 ticket_desc varchar(150),
 ticket_amount float,
 employee_id integer references users(user_id),
-manager_id integer references users(user_id),
-ticket_stat ticket_status
+manager_id integer,
+ticket_stat varchar(30)
 );
 
 

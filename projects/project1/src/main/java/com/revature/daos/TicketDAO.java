@@ -8,7 +8,7 @@ import com.revature.models.Ticket;
 
 public interface TicketDAO {
 	
-	public int insertTicket(Ticket t) throws TicketNotCreatedException;
+	public void insertTicket(Ticket t);
 	public Ticket getTicketByID(int id) throws TicketNotFoundException;
 
 	public List<Ticket> getTicketByEmpID(int empID);

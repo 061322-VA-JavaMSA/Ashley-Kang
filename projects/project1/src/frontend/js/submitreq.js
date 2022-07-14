@@ -2,8 +2,6 @@ let submitButton = document.getElementById('submit');
 submitButton.addEventListener('click', submitTicket);
 
 async function submitTicket(){
-    console.log(principalString);
-    console.log('button was clicked');
     let ticketType = document.getElementById('type').value.toUpperCase();
     let ticketDesc = document.getElementById('desc').value;
     let ticketAmount = document.getElementById('amount').value;
@@ -22,8 +20,7 @@ async function submitTicket(){
 
     if(response.status = 201){
         let data = await response.json();
-        console.log(response.status);
-        console.log(data);
+        window.location.href="../html/viewreq.html";
     } else{
         console.log('Unable to login.')
     }

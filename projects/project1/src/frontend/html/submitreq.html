@@ -11,18 +11,23 @@
             </ul>
         </nav>
         <main>
-            Submit Requests
-            Employee Reimbursment Service
+            <h1>Submit Request</h1>
+            <hr>
             <br>
-            <select id = "type">
-                <option>Food</option>
-                <option>Travel</option>
-                <option>Lodging</option>
-                <option>Other</option>
-            </select>
-            <input type="text" id="desc" />
-            <input type="text" id="amount" />
-            <button type="button" id="submit">Submit</button>
+            <div class = "subInfo">
+                <select id = "type">
+                    <option>Food</option>
+                    <option>Travel</option>
+                    <option>Lodging</option>
+                    <option>Other</option>
+                </select>
+                <br>
+                <input type="text" placeholder = "Description" id="desc" />
+                <br>
+                <input type="text" placeholder = "Amount" id="amount" />
+                <br>
+                <button type="button" id="submit">Submit</button>
+            </div>
         </main>
         <script src="../js/main.js"></script>
         <script src = "../js/submitreq.js"></script>

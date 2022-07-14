@@ -33,7 +33,6 @@ public class RequestServlet extends HttpServlet {
 		String pathInfo = request.getPathInfo();
 		if(pathInfo != null) {
 			int userID = Integer.parseInt(pathInfo.substring(1));
-			//User u = us.getUserByID(userID);
 			try(PrintWriter pw = response.getWriter()){
 				pw.write(om.writeValueAsString(ts.getTicketByEmpID(userID)));
 				response.setStatus(200);
@@ -51,35 +50,26 @@ public class RequestServlet extends HttpServlet {
 		}
 	}
 
-	//submit tickets via employee
-	//FIXME
-	//USER ID IS NULL OR TICKET DOES NOT HAVE REQUIRED PERSISTER
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CorsFix.addCorsHeader(request.getRequestURI(), response);
 		
 		String ticketType = request.getParameter("type");
 		String ticketDesc = request.getParameter("desc");
 		Float ticketAmount = Float.parseFloat(request.getParameter("amount"));
-		int userID = Integer.parseInt(request.getParameter("userID"));
+		String pathInfo = request.getPathInfo();
+		int id = Integer.parseInt(pathInfo.substring(1));
+
 	
 		
 		//retrieve employees id
 		Ticket t = new Ticket();
-		t.setStatus(Ticket.Status.PENDING);
-		t.setType(Ticket.Type.valueOf(ticketType));
-		System.out.println("User_ROLE" + request.getSession().getAttribute("userRole"));
-		System.out.println("User_ID" + request.getSession().getAttribute("userID"));
-		t.setEmployee_id(userID);
+		t.setStatus("PENDING");
+		t.setType(ticketType);
+		t.setEmployee_id(id);
 		t.setTicket_amount(ticketAmount);
 		t.setTicket_desc(ticketDesc);
-		try {
-			ts.insertTicket(t);
-			if(t.getId() == -1) {
-				throw new TicketNotCreatedException();
-			}
-		}catch (TicketNotCreatedException e){
-			e.printStackTrace();
-		}
+		ts.insertTicket(t);
 		
 		//created the ticket successfully
 		try(PrintWriter pw = response.getWriter()){

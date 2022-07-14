@@ -11,14 +11,8 @@ import com.revature.models.Ticket;
 public class TicketService {
 	TicketHibernate th = new TicketHibernate();
 	
-	public int insertTicket(Ticket t){
-		try {
-			th.insertTicket(t);
-		} catch (TicketNotCreatedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return t.getId();
+	public void insertTicket(Ticket t){
+		th.insertTicket(t);
 	}
 	public Ticket getTicketByID(int id) {
 		Ticket t = null;

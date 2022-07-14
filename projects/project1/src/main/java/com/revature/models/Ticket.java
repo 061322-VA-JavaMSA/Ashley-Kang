@@ -6,27 +6,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tickets")
+@Table(name = "tickets", schema = "public")
 public class Ticket {
 	
-	public enum Type{
-		LODGING,
-		TRAVEL,
-		FOOD,
-		OTHER
-	}
-	
-	public enum Status{
-		APPROVED,
-		PENDING,
-		DENIED
-	}
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ticket_id")
 	private int id;
 	
@@ -36,19 +27,19 @@ public class Ticket {
 	@Column(name = "ticket_amount")
 	private float ticket_amount;
 	
-	@Column (name = "employee_id")
+	@Column(name = "employee_id")
 	private int employee_id;
 	
-	@Column (name = "manager_id")
+	
+	@Column(name = "manager_id")
 	private int manager_id;
 	
-	@Enumerated(EnumType.STRING)
 	@Column (name = "ticket_ty")
-	private Type type;
+	private String type;
 	
-	@Enumerated(EnumType.STRING)
+
 	@Column (name = "ticket_stat")
-	private Status status;
+	private String status;
 	
 	
 	public int getId() {
@@ -82,16 +73,16 @@ public class Ticket {
 	public void setManager_id(int id) {
 		this.manager_id = id;
 	}
-	public Type getType() {
+	public String getType() {
 		return type;
 	}
-	public void setType(Type type) {
+	public void setType(String type) {
 		this.type = type;
 	}
-	public Status getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(Status status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	@Override
@@ -108,9 +99,9 @@ public class Ticket {
 			return false;
 		Ticket other = (Ticket) obj;
 		return employee_id == other.employee_id && id == other.id && manager_id == other.manager_id
-				&& status == other.status
+				&& Objects.equals(status, other.status)
 				&& Float.floatToIntBits(ticket_amount) == Float.floatToIntBits(other.ticket_amount)
-				&& Objects.equals(ticket_desc, other.ticket_desc) && type == other.type;
+				&& Objects.equals(ticket_desc, other.ticket_desc) && Objects.equals(type, other.type);
 	}
 	@Override
 	public String toString() {
@@ -118,7 +109,5 @@ public class Ticket {
 				+ ", employee_id=" + employee_id + ", manager_id=" + manager_id + ", type=" + type + ", status="
 				+ status + "]";
 	}
-	
-	
 	
 }

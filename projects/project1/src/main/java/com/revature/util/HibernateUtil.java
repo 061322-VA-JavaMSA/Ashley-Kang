@@ -8,6 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import com.revature.models.Ticket;
 import com.revature.models.User;
 
 
@@ -27,6 +28,7 @@ private static SessionFactory sf;
 		Configuration config = new Configuration();
 		config.configure("hibernate.cfg.xml").addProperties(properties);
 		config.addAnnotatedClass(User.class);
+		config.addAnnotatedClass(Ticket.class);
 		
 		ServiceRegistry sr = new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
 		

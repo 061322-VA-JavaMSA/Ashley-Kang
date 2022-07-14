@@ -20,22 +20,15 @@ import jakarta.persistence.criteria.Root;
 public class TicketHibernate implements TicketDAO{
 
 	@Override
-	public int insertTicket(Ticket t) throws TicketNotCreatedException{
-		t.setId(-1);
+	public void insertTicket(Ticket t){	
 		try(Session s = HibernateUtil.getSessionFactory().openSession()){
 			Transaction tx = s.beginTransaction();
-			int id = (int) s.save(t);
-			t.setId(id);
+			s.persist(t);
 			tx.commit();	
 		} catch(ConstraintViolationException e) {
 			//log it
 		}
 		
-		if(t.getId() == -1) {
-			throw new TicketNotCreatedException();
-		}else {
-			return t.getId();
-		}
 	}
 	
 
