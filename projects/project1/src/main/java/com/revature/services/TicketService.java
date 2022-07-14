@@ -1,15 +1,19 @@
 package com.revature.services;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import com.revature.daos.TicketHibernate;
-import com.revature.exceptions.TicketNotCreatedException;
+
 import com.revature.exceptions.TicketNotFoundException;
 import com.revature.models.Ticket;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class TicketService {
 	TicketHibernate th = new TicketHibernate();
+	private static Logger log = LogManager.getLogger(TicketService.class);
 	
 	public void insertTicket(Ticket t){
 		th.insertTicket(t);
@@ -19,8 +23,7 @@ public class TicketService {
 		try {
 			t = th.getTicketByID(id);
 		} catch (TicketNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Exception thrown:" + e.fillInStackTrace());
 		}
 		return t;
 	}
@@ -60,8 +63,7 @@ public class TicketService {
 		try {
 			th.updateTicket(stat, id);
 		} catch (TicketNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Exception thrown:" + e.fillInStackTrace());
 		}
 	}
 	
@@ -69,8 +71,7 @@ public class TicketService {
 		try {
 			th.updateMTicket(mID, tID);
 		} catch (TicketNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Exception thrown:" + e.fillInStackTrace());
 		}
 	}
 }

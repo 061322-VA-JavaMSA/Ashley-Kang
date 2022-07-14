@@ -19,7 +19,11 @@ import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class UserHibernate implements UserDAO{
+	private static Logger log = LogManager.getLogger(UserHibernate.class);
 
 	@Override
 	public List<UserDTO> getUsers(){
@@ -28,7 +32,7 @@ public class UserHibernate implements UserDAO{
 		try(Session s = HibernateUtil.getSessionFactory().openSession()){
 			users = s.createQuery("from User", User.class).list();
 		}catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception thrown:" + e.fillInStackTrace());
 		}
 		
 		List<UserDTO> usersDTO = new ArrayList<UserDTO>();
@@ -47,7 +51,7 @@ public class UserHibernate implements UserDAO{
 			u.setId(id);
 			tx.commit();	
 		} catch(ConstraintViolationException e) {
-			//log it
+			log.error("ConstraintViolationException thrown:" + e.fillInStackTrace());
 		}
 		if(u.getId() == -1) {
 			throw new UserNotCreatedException();
@@ -63,7 +67,9 @@ public class UserHibernate implements UserDAO{
 			u = s.get(User.class, id);
 		}
 		if(u == null) {
+			log.error("UserNotFoundException thrown");
 			throw new UserNotFoundException();
+			
 		}else {
 			return u;
 		}
@@ -87,6 +93,7 @@ public class UserHibernate implements UserDAO{
 		}
 		
 		if(user == null) {
+			log.error("UserNotFoundException thrown:");
 			throw new UserNotFoundException();
 		}
 		else {
@@ -137,6 +144,7 @@ public class UserHibernate implements UserDAO{
 	public void updateN(String n, int id) throws UserNotFoundException{
 		User u = getUserByID(id);
 		if(u == null) {
+			log.error("Exception thrown:");
 			throw new UserNotFoundException();
 		}
 		try(Session s = HibernateUtil.getSessionFactory().openSession();){			

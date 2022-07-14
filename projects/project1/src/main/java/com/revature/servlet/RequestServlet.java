@@ -7,17 +7,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.exceptions.TicketNotCreatedException;
+
 import com.revature.models.Ticket;
 import com.revature.models.User;
 import com.revature.services.TicketService;
 import com.revature.services.UserService;
 import com.revature.util.CorsFix;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class RequestServlet extends HttpServlet {
+	private static Logger log = LogManager.getLogger(RequestServlet.class);
 	private static final long serialVersionUID = 1L;
 	private TicketService ts = new TicketService();
 	private UserService us = new UserService();
@@ -37,14 +41,14 @@ public class RequestServlet extends HttpServlet {
 				pw.write(om.writeValueAsString(ts.getTicketByEmpID(userID)));
 				response.setStatus(200);
 			}catch (Exception e) {
-				e.printStackTrace();
+				log.error("Exception thrown:" + e.fillInStackTrace());
 				response.setStatus(400);			}
 		}else {
 			try(PrintWriter pw = response.getWriter()){
 				pw.write(om.writeValueAsString(ts.getAllTickets()));
 				response.setStatus(200);
 			}catch (Exception e) {
-				e.printStackTrace();
+				log.error("Exception thrown:" + e.fillInStackTrace());
 				response.setStatus(400);
 			}
 		}
@@ -63,6 +67,7 @@ public class RequestServlet extends HttpServlet {
 			String status = request.getParameter("status");
 			ts.updateTicket(status, ticketid);
 			ts.updateMTicket(ticketid, u.getId());
+			log.info("updated ticket:" + ts.getTicketByID(ticketid));
 			response.setStatus(200);
 		}else {
 			//employee creating ticket
@@ -82,7 +87,7 @@ public class RequestServlet extends HttpServlet {
 			try(PrintWriter pw = response.getWriter()){
 				pw.write(om.writeValueAsString(t));
 			}catch (Exception e) {
-				e.printStackTrace();
+				log.error("Exception thrown:" + e.fillInStackTrace());
 			}
 			response.setStatus(201);
 		}

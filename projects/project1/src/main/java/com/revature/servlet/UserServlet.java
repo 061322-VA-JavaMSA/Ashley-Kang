@@ -9,14 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import com.revature.dtos.UserDTO;
 import com.revature.models.User;
 import com.revature.services.UserService;
 import com.revature.util.CorsFix;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class UserServlet extends HttpServlet {
+	private static Logger log = LogManager.getLogger(UserServlet.class);
 	private static final long serialVersionUID = 1L;
 	private UserService us = new UserService();
 	private ObjectMapper om = new ObjectMapper();
@@ -33,7 +38,7 @@ public class UserServlet extends HttpServlet {
 				response.setStatus(200);
 				pw.close();
 			}catch (Exception e) {
-				e.printStackTrace();
+				log.error("Exception thrown:" + e.fillInStackTrace());
 			}
 		}else {
 			int id = Integer.parseInt(pathInfo.substring(1));
@@ -45,6 +50,7 @@ public class UserServlet extends HttpServlet {
 
 				response.setStatus(200);
 			} catch (Exception e) {
+				log.error("Exception thrown:" + e.fillInStackTrace());
 				response.setStatus(404);
 			}
 		}

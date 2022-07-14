@@ -16,10 +16,14 @@ import com.revature.models.User;
 import com.revature.services.UserService;
 import com.revature.util.CorsFix;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class AuthServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserService us = new UserService();
 	private ObjectMapper om = new ObjectMapper();
+	private static Logger log = LogManager.getLogger(AuthServlet.class);
        
     
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,6 +35,7 @@ public class AuthServlet extends HttpServlet {
 		try {
 			User principal = us.getUserByName(username);
 			if(!principal.getUser_pass().equals(password)) {
+				log.error("User not found");
 				throw new UserNotFoundException();
 			}else {
 				request.getSession().setAttribute("userID", principal.getId());
@@ -52,7 +57,7 @@ public class AuthServlet extends HttpServlet {
 			
 		}catch (UserNotFoundException e) {
 			response.sendError(400, "Login unsuccessful.");
-			e.printStackTrace();
+			log.error("Status code: 400. Login unsuccessful" + e.fillInStackTrace());
 		}
 	}
 	
@@ -63,6 +68,7 @@ public class AuthServlet extends HttpServlet {
 		HttpSession session = req.getSession();
 		
 		session.invalidate();
+		log.info("session terminated.");
 	}
 	
 	

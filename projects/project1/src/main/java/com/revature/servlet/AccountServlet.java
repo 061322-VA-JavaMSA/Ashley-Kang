@@ -9,15 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.dtos.UserDTO;
+
 import com.revature.models.User;
 import com.revature.services.UserService;
 import com.revature.util.CorsFix;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserService us = new UserService();
 	private ObjectMapper om = new ObjectMapper();
+	private static Logger log = LogManager.getLogger(AccountServlet.class);
     
 	//retrieve account details
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,7 +35,7 @@ public class AccountServlet extends HttpServlet {
 			response.setStatus(200);
 			pw.close();
 		}catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception thrown:" + e.fillInStackTrace());
 		}
 		
 	}
@@ -71,7 +75,7 @@ public class AccountServlet extends HttpServlet {
 			pw.write(om.writeValueAsString(u));
 			pw.close();
 		}catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception thrown:" + e.fillInStackTrace());
 		}
 	}
 	

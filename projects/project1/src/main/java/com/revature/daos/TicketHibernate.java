@@ -7,11 +7,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
-import com.revature.exceptions.TicketNotCreatedException;
+
 import com.revature.exceptions.TicketNotFoundException;
-import com.revature.exceptions.UserNotFoundException;
+
 import com.revature.models.Ticket;
-import com.revature.models.User;
+
 import com.revature.util.HibernateUtil;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -20,7 +20,11 @@ import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class TicketHibernate implements TicketDAO{
+	private static Logger log = LogManager.getLogger(TicketHibernate.class);
 
 	@Override
 	public void insertTicket(Ticket t){	
@@ -29,7 +33,7 @@ public class TicketHibernate implements TicketDAO{
 			s.persist(t);
 			tx.commit();	
 		} catch(ConstraintViolationException e) {
-			//log it
+			log.error("Exception thrown:" + e.fillInStackTrace());
 		}
 		
 	}
@@ -42,6 +46,7 @@ public class TicketHibernate implements TicketDAO{
 			t = s.get(Ticket.class, id);
 		}
 		if(t == null) {
+			log.error("Exception thrown:");
 			throw new TicketNotFoundException();
 		}else {
 			return t;
@@ -224,6 +229,7 @@ public class TicketHibernate implements TicketDAO{
 	public void updateTicket(String status, int ticketID) throws TicketNotFoundException{
 		Ticket t = getTicketByID(ticketID);
 		if(t == null) {
+			log.error("Exception thrown:");
 			throw new TicketNotFoundException();
 		}
 		try(Session s = HibernateUtil.getSessionFactory().openSession();){			
@@ -244,6 +250,7 @@ public class TicketHibernate implements TicketDAO{
 	public void updateMTicket(int mID, int ticketID) throws TicketNotFoundException {
 		Ticket t = getTicketByID(ticketID);
 		if(t == null) {
+			log.error("Exception thrown:");
 			throw new TicketNotFoundException();
 		}
 		try(Session s = HibernateUtil.getSessionFactory().openSession();){			
