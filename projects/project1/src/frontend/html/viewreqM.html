@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>View Reimbursement Requests</title>
+        <link rel="stylesheet" href="../css/main.css"/>
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <div id = "navBar"></div>
+            </ul>
+        </nav>
+        <main>
+            <h1>View Requests</h1>
+            <hr>
+            <br>
+            <p> Which ticket would you want to update?</p>
+            <br>
+            <div class = "viewRequests">
+                <input type="text" placeholder = "Ticket ID" id="ticketid"/>
+                <select id = "status">
+                    <option>Approved</option>
+                    <option>Denied</option>
+                </select>
+                    <button type="button" id="submit">Update</button>
+            </div>
+            <br>
+            <section id="tableDiv"></section>
+        </main>
+        <script src="../js/main.js"></script>
+        <script src="../js/viewReqM.js"></script>
+    </body>
+</html>

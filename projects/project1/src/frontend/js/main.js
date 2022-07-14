@@ -38,14 +38,14 @@ function navBar(){
         li.appendChild(a);
         navigationBarUL.appendChild(li);
 
-        li = document.createElement('li');
-    a = document.createElement('a');
-    a.innerHTML = 'View Requsts';
-    a.setAttribute('href', '../html/viewreq.html');
-    li.appendChild(a);
-    navigationBarUL.appendChild(li);
-
     if(principal.role === 'MANAGER'){
+        li = document.createElement('li');
+        a = document.createElement('a');
+        a.innerHTML = 'View Requests';
+        a.setAttribute('href', '../html/viewreqM.html');
+        li.appendChild(a);
+        navigationBarUL.appendChild(li);
+
         li = document.createElement('li');
         a = document.createElement('a');
         a.innerHTML='View Employees';
@@ -54,6 +54,13 @@ function navBar(){
         navigationBarUL.appendChild(li);
     }
     if(principal.role === 'EMPLOYEE'){
+        li = document.createElement('li');
+        a = document.createElement('a');
+        a.innerHTML = 'View Requests';
+        a.setAttribute('href', '../html/viewreq.html');
+        li.appendChild(a);
+        navigationBarUL.appendChild(li);
+
         li = document.createElement('li');
         a = document.createElement('a');
         a.innerHTML='Submit a Request';

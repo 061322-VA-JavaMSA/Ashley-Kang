@@ -205,6 +205,55 @@ hr{
     background-color:#f2cb97;
 }
 
+.viewRequests {
+   margin-left: auto;
+   margin-right: auto;
+   width:25%;
+}
+
+.viewRequests select{
+    outline: none;
+      display: block;
+      width: 100%;
+      margin: 0 0 20px;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      font-family: Arial, Helvetica, sans-serif;
+      box-sizing: border-box;
+      font-size: 14px;
+}
+
+.viewRequests input{
+    outline: none;
+      display: block;
+      width: 100%;
+      margin: 0 0 20px;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      font-family: Arial, Helvetica, sans-serif;
+      box-sizing: border-box;
+      font-size: 14px;
+}
+
+.viewRequests input:focus {
+        border: 1px solid #f8d8ae;
+}
+
+.viewRequests button{
+    cursor: pointer;
+    background: #fdc47a;
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+}
+
+.viewRequests button:hover{
+    background-color:#f2cb97;
+}
+
 
 footer{
     background-color:  aliceblue;

@@ -11,7 +11,6 @@ async function getUsers(){
 
     if(response.status == 200){
         let data = await response.json();
-        //console.log(data);
         createTable(data)
     } else{
         console.log('Unable to retrieve users.')

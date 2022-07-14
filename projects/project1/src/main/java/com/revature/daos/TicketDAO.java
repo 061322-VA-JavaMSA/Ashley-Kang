@@ -10,6 +10,9 @@ public interface TicketDAO {
 	
 	public void insertTicket(Ticket t);
 	public Ticket getTicketByID(int id) throws TicketNotFoundException;
+	
+	public void updateTicket(String status, int ticketID) throws TicketNotFoundException;
+	public void updateMTicket(int mID, int ticketID) throws TicketNotFoundException;
 
 	public List<Ticket> getTicketByEmpID(int empID);
 	public List<Ticket> getTicketByManID(int manID);

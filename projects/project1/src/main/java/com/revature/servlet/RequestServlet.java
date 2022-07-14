@@ -53,33 +53,42 @@ public class RequestServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CorsFix.addCorsHeader(request.getRequestURI(), response);
-		
-		String ticketType = request.getParameter("type");
-		String ticketDesc = request.getParameter("desc");
-		Float ticketAmount = Float.parseFloat(request.getParameter("amount"));
 		String pathInfo = request.getPathInfo();
-		int id = Integer.parseInt(pathInfo.substring(1));
-
-	
 		
-		//retrieve employees id
-		Ticket t = new Ticket();
-		t.setStatus("PENDING");
-		t.setType(ticketType);
-		t.setEmployee_id(id);
-		t.setTicket_amount(ticketAmount);
-		t.setTicket_desc(ticketDesc);
-		ts.insertTicket(t);
-		
-		//created the ticket successfully
-		try(PrintWriter pw = response.getWriter()){
-			pw.write(om.writeValueAsString(t));
-		}catch (Exception e) {
-			e.printStackTrace();
+		User u = us.getUserByID(Integer.parseInt(pathInfo.substring(1)));
+		if(u.getRole() == User.Role.MANAGER) {
+			//manager updating ticket
+			System.out.println(request.getParameter("ticketid"));
+			int ticketid = Integer.parseInt(request.getParameter("ticketid"));
+			String status = request.getParameter("status");
+			ts.updateTicket(status, ticketid);
+			ts.updateMTicket(ticketid, u.getId());
+			response.setStatus(200);
+		}else {
+			//employee creating ticket
+			int id = Integer.parseInt(pathInfo.substring(1));
+			String ticketType = request.getParameter("type");
+			String ticketDesc = request.getParameter("desc");
+			Float ticketAmount = Float.parseFloat(request.getParameter("amount"));
+			Ticket t = new Ticket();
+			t.setStatus("PENDING");
+			t.setType(ticketType);
+			t.setEmployee_id(id);
+			t.setTicket_amount(ticketAmount);
+			t.setTicket_desc(ticketDesc);
+			ts.insertTicket(t);
+			
+			//created the ticket successfully
+			try(PrintWriter pw = response.getWriter()){
+				pw.write(om.writeValueAsString(t));
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			response.setStatus(201);
 		}
-		response.setStatus(201);
+		
 	}
-	
+		
 	@Override
 	protected void doOptions(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		CorsFix.addCorsHeader(req.getRequestURI(), res);

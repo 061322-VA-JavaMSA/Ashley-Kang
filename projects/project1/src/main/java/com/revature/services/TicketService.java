@@ -55,4 +55,22 @@ public class TicketService {
 	public List<Ticket> getOthTickets(){
 		return th.getOthTickets();
 	}
+	
+	public void updateTicket(String stat, int id) {
+		try {
+			th.updateTicket(stat, id);
+		} catch (TicketNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateMTicket(int mID, int tID) {
+		try {
+			th.updateMTicket(mID, tID);
+		} catch (TicketNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

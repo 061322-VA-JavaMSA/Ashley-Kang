@@ -1,8 +1,34 @@
+let update = document.getElementById('submit');
+update.addEventListener('click', updateTicket);
+
 viewTicket();
+
+async function updateTicket(){
+    let status = document.getElementById('status').value.toUpperCase();
+    let ticketID = document.getElementById('ticketid').value;
+
+    let response = await fetch(`${apiUrl}/requests/${principal.id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            'status': `${status}`,
+            'ticketid': `${ticketID}`
+        })
+    });
+
+    if(response.status = 200){
+        window.location.href="../html/viewreqM.html";
+    } else{
+        console.log('Unable to update Ticket.')
+    }
+}
+
 
 
 async function viewTicket(){
-        let response = await fetch(`${apiUrl}/requests/${principal.id}`, {
+   let response = await fetch(`${apiUrl}/requests`, {
             method: 'GET',
             headers: {
                'Content-Type': 'application/x-www-form-urlencoded'
@@ -14,8 +40,7 @@ async function viewTicket(){
             createTable(data);
         } else{
             console.log('Unable to view tickets.')
-        }
-    
+    }   
 }
 
 
@@ -64,10 +89,11 @@ function createTable(dataInput) {
     for(let i = 0; i<dataInput.length;i++){
         tr = document.createElement('tr');
 
-        //ticket id
-        td = document.createElement('td');
-        td.innerHTML = dataInput[i].id;
-        tr.appendChild(td);
+         //ticket id
+         td = document.createElement('td');
+         td.innerHTML = dataInput[i].id;
+         tr.appendChild(td);
+ 
 
 
         //employee id

@@ -19,9 +19,8 @@ async function submitTicket(){
     });
 
     if(response.status = 201){
-        let data = await response.json();
         window.location.href="../html/viewreq.html";
     } else{
-        console.log('Unable to login.')
+        console.log('Unable to create Ticket.')
     }
 }

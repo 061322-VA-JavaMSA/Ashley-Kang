@@ -9,11 +9,14 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import com.revature.exceptions.TicketNotCreatedException;
 import com.revature.exceptions.TicketNotFoundException;
+import com.revature.exceptions.UserNotFoundException;
 import com.revature.models.Ticket;
+import com.revature.models.User;
 import com.revature.util.HibernateUtil;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
@@ -214,6 +217,46 @@ public class TicketHibernate implements TicketDAO{
 		}
 		
 		return tickets;
+	}
+
+
+	@Override
+	public void updateTicket(String status, int ticketID) throws TicketNotFoundException{
+		Ticket t = getTicketByID(ticketID);
+		if(t == null) {
+			throw new TicketNotFoundException();
+		}
+		try(Session s = HibernateUtil.getSessionFactory().openSession();){			
+			CriteriaBuilder cb = s.getCriteriaBuilder();
+			CriteriaUpdate<Ticket> criteriaUpdate = cb.createCriteriaUpdate(Ticket.class);
+			Root<Ticket> root = criteriaUpdate.from(Ticket.class);
+			criteriaUpdate.set("status", status);
+			criteriaUpdate.where(cb.equal(root.get("id"), ticketID));
+			Transaction transaction = s.beginTransaction();
+			s.createQuery(criteriaUpdate).executeUpdate();
+			transaction.commit();
+		}
+		
+	}
+
+
+	@Override
+	public void updateMTicket(int mID, int ticketID) throws TicketNotFoundException {
+		Ticket t = getTicketByID(ticketID);
+		if(t == null) {
+			throw new TicketNotFoundException();
+		}
+		try(Session s = HibernateUtil.getSessionFactory().openSession();){			
+			CriteriaBuilder cb = s.getCriteriaBuilder();
+			CriteriaUpdate<Ticket> criteriaUpdate = cb.createCriteriaUpdate(Ticket.class);
+			Root<Ticket> root = criteriaUpdate.from(Ticket.class);
+			criteriaUpdate.set("manager_id", mID);
+			criteriaUpdate.where(cb.equal(root.get("id"), ticketID));
+			Transaction transaction = s.beginTransaction();
+			s.createQuery(criteriaUpdate).executeUpdate();
+			transaction.commit();
+		}
+		
 	}
 
 }

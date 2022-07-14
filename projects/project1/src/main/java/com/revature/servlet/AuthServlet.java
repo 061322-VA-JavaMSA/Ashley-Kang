@@ -34,7 +34,7 @@ public class AuthServlet extends HttpServlet {
 				throw new UserNotFoundException();
 			}else {
 				request.getSession().setAttribute("userID", principal.getId());
-				System.out.println(request.getSession().getAttribute("userID"));
+				//System.out.println(request.getSession().getAttribute("userID"));
 				request.getSession().setAttribute("userRole", principal.getRole());
 				response.setStatus(200);
 				
