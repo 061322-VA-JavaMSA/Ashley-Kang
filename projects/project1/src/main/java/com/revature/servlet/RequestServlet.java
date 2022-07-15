@@ -62,11 +62,10 @@ public class RequestServlet extends HttpServlet {
 		User u = us.getUserByID(Integer.parseInt(pathInfo.substring(1)));
 		if(u.getRole() == User.Role.MANAGER) {
 			//manager updating ticket
-			System.out.println(request.getParameter("ticketid"));
 			int ticketid = Integer.parseInt(request.getParameter("ticketid"));
 			String status = request.getParameter("status");
 			ts.updateTicket(status, ticketid);
-			ts.updateMTicket(ticketid, u.getId());
+			ts.updateMTicket(u.getId(), ticketid);
 			log.info("updated ticket:" + ts.getTicketByID(ticketid));
 			response.setStatus(200);
 		}else {
